@@ -793,7 +793,6 @@
       mercury.name = "Mercury";
       planetGroup.add(mercury);
 
-      scene.add(planetGroup);
       objectsGroup.add(planetGroup); // Añadimos el grupo de planetas a objectsGroup para animarlos
     }
 
@@ -1112,6 +1111,15 @@
     renderer.setAnimationLoop(animate);
 
     window.addEventListener('resize', ()=>{ camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); });
+
+    // --- ✨ Gestor de Sonidos de UI ---
+    const uiSounds = {
+      // Asegúrate de que las rutas a tus archivos de sonido sean correctas.
+      click: new Audio("{% static 'sounds/click.mp3' %}"),
+      open: new Audio("{% static 'sounds/open.mp3' %}"),
+      close: new Audio("{% static 'sounds/close.mp3' %}"),
+      access: new Audio("{% static 'sounds/access.mp3' %}")
+    };
     document.addEventListener('visibilitychange', ()=>{ if(document.hidden) { renderer.setAnimationLoop(null); } else { renderer.setAnimationLoop(animate); } });
 
     // --- Moon Click Interaction ---
@@ -1169,6 +1177,7 @@
         // 2. Si no, buscar si se hizo clic en la luna.
         } else if (intersects.find(i => i.object.name === 'moon')) {
             moonModal.classList.add('show');
+            uiSounds.open.play();
         // 3. Finalmente, si no fue ninguno de los anteriores, comprobar si fue la Tierra.
         } else if (intersects.find(i => i.object.name === 'earth')) {
           buildControls.classList.remove('hide'); // Ensure it's not hiding
@@ -1191,15 +1200,18 @@
     }
 
     function closeModal() {
+      uiSounds.close.play();
       moonModal.classList.remove('show');
     }
 
     function showHelpModal() {
+      uiSounds.open.play();
       helpModal.classList.add('show');
       setTimeout(() => helpModal.classList.add('content-visible'), 200); // Activa la animación del contenido un poco después
     }
     function closeHelpModal() {
       helpModal.classList.remove('show', 'content-visible');
+      uiSounds.close.play();
     }
 
 
@@ -1213,11 +1225,15 @@
     }
 
     function showInfoModal(title, text) {
+      uiSounds.open.play();
       infoModalTitle.textContent = title;
       infoModalText.textContent = text;
       infoModal.classList.add('show');
     }
-    function closeInfoModal() { infoModal.classList.remove('show'); }
+    function closeInfoModal() { 
+      infoModal.classList.remove('show');
+      uiSounds.close.play();
+    }
 
     function createRocketsAndTetris(earth){
       for(let i=0;i<6;i++){
@@ -1310,23 +1326,27 @@
     // Close modal if user clicks outside the content
     moonModal.addEventListener('click', (event) => { if (event.target === moonModal) closeModal(); event.stopPropagation(); });
     cancelBtn.addEventListener('click', (event) => {
+      uiSounds.click.play();
       event.stopPropagation(); // Prevent window click from firing
       clearTimeout(buildControlsTimeout);
       hideBuildControls();
     });
     infoBtn.addEventListener('click', (event) => {
+      uiSounds.click.play();
       event.stopPropagation();
       clearTimeout(buildControlsTimeout);
       hideBuildControls();
       travelToConstellation();
     });
     accessBtn.addEventListener('click', (event) => {
+      uiSounds.access.play();
       event.stopPropagation();
       clearTimeout(buildControlsTimeout);
       hideBuildControls();
       travelToLogin();
     });
     cancelLoginBtn.addEventListener('click', (event) => {
+      uiSounds.close.play();
       event.stopPropagation();
       loginForm.style.display = 'none';
       cityView.style.opacity = 0;
@@ -1338,7 +1358,10 @@
       closeInfoModal();
     });
     
-    helpBtn.addEventListener('click', (event) => { event.stopPropagation(); showHelpModal(); });
+    helpBtn.addEventListener('click', (event) => { 
+      event.stopPropagation(); 
+      showHelpModal(); 
+    });
     helpModalCloseBtn.addEventListener('click', closeHelpModal);
     helpModal.addEventListener('click', (event) => { if (event.target === helpModal) closeHelpModal(); });
 

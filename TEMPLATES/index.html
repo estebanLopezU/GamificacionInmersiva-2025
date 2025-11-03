@@ -15,12 +15,31 @@
     canvas{display:block}
     /* UI card */
     .ui{
-      position:absolute;left:50%;top:32px;z-index:60;backdrop-filter:blur(6px) saturate(120%);
+      position:absolute;left:50%;top:32px;z-index:60;
       background:var(--card-bg);padding:16px 20px;border-radius:14px;box-shadow:0 8px 30px rgba(2,8,23,0.7);
       min-width:260px;
       /* Dramatic intro animation */
       transform: translate(-50%, 30px) scale(0.95);
       transition: opacity 1s ease-out 0.5s, transform 1s ease-out 0.5s;
+    }
+    /* --- ✨ MEJORA DE BORDES: Gradiente Luminoso --- */
+    .ui, .progress-ui, .modal-content, .login-form {
+      position: relative; /* Necesario para el pseudo-elemento */
+      backdrop-filter: blur(6px) saturate(120%);
+      border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil como fallback y para estructura */
+    }
+    .ui::before, .progress-ui::before, .modal-content::before, .login-form::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      border-radius: inherit; /* Hereda el radio del borde del padre */
+      padding: 1px; /* Grosor del borde del gradiente */
+      background: linear-gradient(135deg, #78ffd6, #c792ff);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      z-index: -1; /* Se posiciona detrás del contenido del panel */
     }
     .ui h1{margin:0;font-size:1.35rem;letter-spacing:-0.3px; text-align: center;}
     .btn{background:linear-gradient(90deg,#78ffd6,#59d0ff);border:none;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}
@@ -28,9 +47,10 @@
     /* Progress UI */
     .progress-ui {
       position: absolute; left: 32px; top: 32px; z-index: 50;
-      background: var(--card-bg); padding: 12px 16px; border-radius: 12px;
-      backdrop-filter: blur(6px); box-shadow: 0 4px 20px rgba(2,8,23,0.5);
+      background: var(--card-bg); padding: 12px 16px; border-radius: 12px; 
+      box-shadow: 0 4px 20px rgba(2,8,23,0.5);
       width: 220px;
+      display: none; /* Oculta el panel de progreso global */
     }
     .progress-ui h2 { font-size: 0.9rem; margin: 0 0 8px 0; opacity: 0.8; }
     .progress-bar-container { background: rgba(0,0,0,0.3); border-radius: 99px; height: 10px; overflow: hidden; }
@@ -47,7 +67,7 @@
       backdrop-filter: blur(4px); align-items: center; justify-content: center;
     }
     .modal-content {
-      background: var(--card-bg); padding: 25px 30px; border-radius: 14px;
+      background: var(--card-bg); padding: 25px 30px; border-radius: 14px; 
       box-shadow: 0 8px 40px rgba(2,8,23,0.8); position: relative;
       width: 90%; max-width: 500px; text-align: center; font-size: 1.1rem; line-height: 1.5;
     }
@@ -106,8 +126,7 @@
       transform: translate(-50%, -50%);
       z-index: 80;
       background: var(--card-bg);
-      padding: 30px; border-radius: 14px;
-      backdrop-filter: blur(8px);
+      padding: 30px; border-radius: 14px; 
       box-shadow: 0 8px 40px rgba(2,8,23,0.8);
       width: 320px;
       display: none; /* Hidden by default */
@@ -272,7 +291,7 @@
           renderer.xr.enabled = true;
           document.body.appendChild(VRButton.createButton(renderer));
         }
-      }
+      } 
     }
     setupVRButton();
     createRealisticSun();
@@ -280,15 +299,18 @@
     // stars
     const starsGeometry = new THREE.BufferGeometry();
     const starCount = 1500; // reduce for perf
-    const starPos = new Float32Array(starCount * 3);
+    const starPos = new Float32Array(starCount * 3); // Posiciones actuales, empiezan en el centro
+    const starFinalPos = new Float32Array(starCount * 3); // Posiciones finales
+
     for(let i=0;i<starCount;i++){
       const r = 500 + Math.random()*600;
       const theta = Math.random()*Math.PI*2; const phi = Math.acos(2*Math.random()-1); // phi is inclination
-      starPos[i*3] = r*Math.sin(phi)*Math.cos(theta);
-      starPos[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
-      starPos[i*3+2] = r*Math.cos(phi);
+      starFinalPos[i*3] = r*Math.sin(phi)*Math.cos(theta);
+      starFinalPos[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
+      starFinalPos[i*3+2] = r*Math.cos(phi);
     }
-    starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPos,3));
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    starsGeometry.setAttribute('finalPosition', new THREE.BufferAttribute(starFinalPos, 3)); // Guardamos las posiciones finales
     const starMaterial = new THREE.PointsMaterial({ size: 0.7, color: 0xffffff, transparent:true, opacity:0.85 });
     const starPoints = new THREE.Points(starsGeometry, starMaterial); scene.add(starPoints);
 
@@ -304,10 +326,11 @@
       {name:'mars', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/mars_1k_color.jpg'},
       {name:'jupiter', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/jupiter2_1k.jpg'},
       {name:'saturn', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/saturn_1k_color.jpg'},
-      {name:'saturnRing', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/saturn_ring_alpha.jpg'},
+      {name:'saturnRing', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/saturn_ring.png'},
       {name:'venus', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/venus_surface.jpg'},
       {name:'uranus', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/uranus2_1k.jpg'},
-      {name:'neptune', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/neptune_1k_color.jpg'}
+      {name:'neptune', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/neptune_1k_color.jpg'},
+      {name:'asteroid', url: 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/planets/moon_1024.jpg'} // Reutilizamos la textura de la luna para los asteroides
     ];
 
     const loader = new THREE.TextureLoader();
@@ -644,40 +667,41 @@
     function createSingleHunter() {
       const hunter = new THREE.Group();
       const hunterBodyMat = new THREE.MeshStandardMaterial({ color: 0x2c3e50, metalness: 0.8, roughness: 0.4 });
-      const hunterCockpitMat = new THREE.MeshStandardMaterial({ color: 0xe74c3c, emissive: 0xc0392b, emissiveIntensity: 2 });
+      const hunterCockpitMat = new THREE.MeshStandardMaterial({ color: 0xe74c3c, emissive: 0xc0392b, emissiveIntensity: 3 });
 
-      const mainBody = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 8), hunterBodyMat);
+      // Hacemos la nave más grande (valores duplicados)
+      const mainBody = new THREE.Mesh(new THREE.ConeGeometry(4, 10, 8), hunterBodyMat);
       mainBody.rotation.z = Math.PI / 2;
       hunter.add(mainBody);
 
-      const cockpit = new THREE.Mesh(new THREE.SphereGeometry(1), hunterCockpitMat);
-      cockpit.position.x = 1;
+      const cockpit = new THREE.Mesh(new THREE.SphereGeometry(2), hunterCockpitMat);
+      cockpit.position.x = 2;
       hunter.add(cockpit);
 
-      // Posición inicial aleatoria para cada nave
-      hunter.position.set((Math.random() - 0.5) * 200, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 200);
+      // Posición inicial más cercana a la Tierra
+      hunter.position.set((Math.random() - 0.5) * 150, (Math.random() - 0.5) * 80, (Math.random() - 0.5) * 150);
       // Cada nave tiene su propio estado
       hunter.userData = { target: null, fireCooldown: Math.random() * 2 }; // Cooldown inicial aleatorio
       alienHunterGroup.add(hunter);
     }
 
     function createMeteorite(texture) {
-      // Usamos Icosahedron para una forma más irregular que una esfera
-      const geo = new THREE.IcosahedronGeometry(Math.random() * 2 + 0.5, 0);
+      // Hacemos los meteoritos más grandes
+      const geo = new THREE.IcosahedronGeometry(Math.random() * 4 + 1.5, 0);
       const mat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.8 });
       const meteorite = new THREE.Mesh(geo, mat);
 
-      // Posición inicial aleatoria fuera de la vista principal
-      const r = 800 + Math.random() * 200;
+      // Posición inicial mucho más cercana a la Tierra
+      const r = 150 + Math.random() * 100;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       meteorite.position.set(r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta), r * Math.cos(phi));
 
-      // Velocidad y dirección aleatorias
+      // Aumentamos la velocidad para que se muevan más rápido en el espacio reducido
       meteorite.userData.velocity = new THREE.Vector3(
-        (Math.random() - 0.5) * 0.5,
-        (Math.random() - 0.5) * 0.5,
-        (Math.random() - 0.5) * 0.5
+        (Math.random() - 0.5) * 0.8,
+        (Math.random() - 0.5) * 0.8,
+        (Math.random() - 0.5) * 0.8
       );
       meteorite.name = "meteorite";
       meteoriteGroup.add(meteorite);
@@ -754,8 +778,8 @@
           m.rotation.x += 0.01;
           m.rotation.y += 0.005;
           // Si se aleja mucho, lo reposicionamos
-          if (m.position.length() > 1500) { // Aumentamos la distancia para que viajen más lejos
-            const r = 800 + Math.random() * 200;
+          if (m.position.length() > 400) { // Reposicionar si se aleja demasiado de la zona central
+            const r = 150 + Math.random() * 100;
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
             m.position.set(r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta), r * Math.cos(phi));
@@ -777,10 +801,10 @@
             hunter.lookAt(targetPosition);
             const direction = new THREE.Vector3();
             hunter.getWorldDirection(direction);
-            hunter.position.add(direction.multiplyScalar(0.8)); // Velocidad de la nave
+            hunter.position.add(direction.multiplyScalar(1.2)); // Aumentamos la velocidad de la nave
 
             // Comprobar si está cerca para disparar
-            if (hunter.position.distanceTo(targetPosition) < 50 && hunter.userData.fireCooldown === 0) {
+            if (hunter.position.distanceTo(targetPosition) < 80 && hunter.userData.fireCooldown === 0) { // Aumentamos la distancia de disparo
               // Disparar láser
               const laserGeo = new THREE.CylinderGeometry(0.1, 0.1, 50, 8);
               const laserMat = new THREE.MeshBasicMaterial({ color: 0xe74c3c, transparent: true, opacity: 0.8 });
@@ -838,37 +862,71 @@
     }
 
     // --- Epic Intro Animation ---
+    // --- ¡NUEVO! Animación de Introducción tipo "Big Bang" ---
     function startIntroAnimation() {
       const uiElements = document.querySelectorAll('.ui, .progress-ui, .credits');
-      uiElements.forEach(el => {
-        el.style.opacity = '0';
-        // Initial transform is now set in CSS for .ui
-      });
+      uiElements.forEach(el => { el.style.opacity = '0'; });
 
-      const startPos = { x: 0, y: 0, z: 14 };
-      const endPos = { x: 0, y: 18, z: 60 };
-      const duration = 3500; // ms
+      // --- CORRECCIÓN: Ocultar objetos aquí, DESPUÉS de que se hayan creado ---
+      if (earthGroup) earthGroup.visible = false;
+      if (objectsGroup) objectsGroup.visible = false;
+      if (alienHunterGroup) alienHunterGroup.visible = false;
+      if (meteoriteGroup) meteoriteGroup.visible = false;
+      if (moonPivot) moonPivot.visible = false;
+
+      // 1. Configuración inicial para el Big Bang
+      controls.enabled = false;
+      camera.position.set(0, 0, 0.1); // Empezar muy cerca del centro
+      const originalBloomStrength = bloom.strength;
+      const originalBloomThreshold = bloom.threshold;
+      bloom.strength = 3.0; // Efecto de brillo intenso
+      bloom.threshold = 0;
+
+      const duration = 4000; // ms
       let startTime = null;
+
+      const startPositions = starsGeometry.attributes.position;
+      const finalPositions = starsGeometry.attributes.finalPosition;
 
       function animateIntro(time) {
         if (!startTime) startTime = time;
         const elapsed = time - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        const easeProgress = 0.5 - 0.5 * Math.cos(progress * Math.PI); // Ease-in-out
+        const easeOutProgress = 1 - Math.pow(1 - progress, 4); // Cubic ease-out
 
-        camera.position.x = startPos.x + (endPos.x - startPos.x) * easeProgress;
-        camera.position.y = startPos.y + (endPos.y - startPos.y) * easeProgress;
-        camera.position.z = startPos.z + (endPos.z - startPos.z) * easeProgress;
+        // 2. Animar las estrellas explotando hacia afuera
+        for (let i = 0; i < starCount; i++) {
+          const i3 = i * 3;
+          startPositions.array[i3] = finalPositions.array[i3] * easeOutProgress;
+          startPositions.array[i3 + 1] = finalPositions.array[i3 + 1] * easeOutProgress;
+          startPositions.array[i3 + 2] = finalPositions.array[i3 + 2] * easeOutProgress;
+        }
+        startPositions.needsUpdate = true;
+
+        // 3. Animar la cámara retrocediendo
+        camera.position.z = 0.1 + 59.9 * easeOutProgress;
+        camera.position.y = 18 * easeOutProgress;
+
+        // 4. Normalizar el brillo a medida que la explosión se disipa
+        bloom.strength = 3.0 * (1 - progress) + originalBloomStrength * progress;
+
+        // 5. Hacer aparecer el sistema solar a mitad de camino
+        if (progress > 0.5) {
+          const fadeInProgress = (progress - 0.5) * 2;
+          if (earthGroup) earthGroup.visible = true;
+          if (objectsGroup) objectsGroup.visible = true;
+          if (alienHunterGroup) alienHunterGroup.visible = true;
+          if (meteoriteGroup) meteoriteGroup.visible = true;
+          if (moonPivot) moonPivot.visible = true;
+        }
 
         if (progress < 1) {
           requestAnimationFrame(animateIntro);
         } else {
+          // 6. Finalizar y mostrar la UI
           controls.enabled = true; // Enable controls after intro
-          // Animate UI elements to their final state
-          const mainUI = document.querySelector('.ui');
-          mainUI.style.opacity = '1';
-          mainUI.style.transform = 'translate(-50%, 0) scale(1)';
-          document.querySelectorAll('.progress-ui, .credits').forEach(el => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
+          bloom.threshold = originalBloomThreshold; // Restaurar bloom
+          uiElements.forEach(el => { el.style.transition = 'opacity 1s ease-out'; el.style.opacity = '1'; });
         }
       }
       requestAnimationFrame(animateIntro);
@@ -920,23 +978,22 @@
       // Check for intersections with objects in the scene
       const intersects = raycaster.intersectObjects(isConstellationView ? constellationGroup.children : scene.children, true);
 
-      // Find the first named object that was clicked (moon or earth)
-      const clickedEarth = intersects.find(i => i.object.name === 'earth');
-      const clickedMoon = intersects.find(i => i.object.name === 'moon');
-      const clickedPlanet = intersects.find(i => planetInfo[i.object.name]);
-
       // Default to hiding controls unless a specific object is clicked
       hideBuildControls();
-      // Prioritize the closest clicked object of interest
+
       if (intersects.length > 0 && !isConstellationView && !isLoginView) {
+        // --- CORRECCIÓN: Se cambió el orden de las comprobaciones ---
+        // 1. Primero, buscar si se hizo clic en un planeta con información.
+        const clickedPlanet = intersects.find(i => planetInfo[i.object.name]);
         if (clickedPlanet) {
           const info = planetInfo[clickedPlanet.object.name];
-          if (info) {
-            showInfoModal(info.title, info.text);
-          }
-        } else if (clickedMoon && (!clickedEarth || clickedMoon.distance < clickedEarth.distance)) {
+          showInfoModal(info.title, info.text);
+          return; // --- CORRECCIÓN: Detener la ejecución para no activar otros clics.
+        // 2. Si no, buscar si se hizo clic en la luna.
+        } else if (intersects.find(i => i.object.name === 'moon')) {
             moonModal.classList.add('show');
-        } else if (clickedEarth) {
+        // 3. Finalmente, si no fue ninguno de los anteriores, comprobar si fue la Tierra.
+        } else if (intersects.find(i => i.object.name === 'earth')) {
           buildControls.classList.remove('hide'); // Ensure it's not hiding
           buildControls.classList.add('show');
           // Auto-hide build controls after a delay

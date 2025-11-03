@@ -54,7 +54,7 @@ ROOT_URLCONF = 'gamificacionProyecto.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,6 +71,17 @@ WSGI_APPLICATION = 'gamificacionProyecto.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'gamificacion_db',          # El nombre que elegiste en el Paso 1
+#         'USER': 'gamificacion_user',        # El usuario que creaste en el Paso 1
+#         'PASSWORD': 'tu_contraseña_segura', # La contraseña que elegiste en el Paso 1
+#         'HOST': 'localhost',          # O la IP del servidor de la base de datos
+#         'PORT': '3306',               # El puerto por defecto de MySQL
+#     }
+# }
 
 DATABASES = {
     'default': {

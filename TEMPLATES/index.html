@@ -74,19 +74,21 @@
       pointer-events: none; /* Allow clicks to pass through the container */
       transition: opacity 0.3s ease-out; /* For smooth fade-out */
     }
+    /* La clase .show ahora usa la nueva animación 'pulseAndShake' */
     .build-controls.show {
       display: flex;
-      animation: fadeIn 0.3s ease-out, shake 0.8s cubic-bezier(.36,.07,.19,.97) both 0.3s;
+      animation: fadeIn 0.3s ease-out, pulseAndShake 0.8s cubic-bezier(.36,.07,.19,.97) both 0.3s;
     }
     .build-controls.hide {
       opacity: 0;
       pointer-events: none;
     }
-    @keyframes shake {
-      10%, 90% { transform: translateX(-50%) translateX(-1px); }
-      20%, 80% { transform: translateX(-50%) translateX(2px); }
-      30%, 50%, 70% { transform: translateX(-50%) translateX(-4px); }
-      40%, 60% { transform: translateX(-50%) translateX(4px); }
+    /* Nueva animación más brusca y llamativa */
+    @keyframes pulseAndShake {
+      10%, 90% { transform: translate(-50%, -2px) scale(1.02) translateX(-2px); }
+      20%, 80% { transform: translate(-50%, 1px) scale(0.98) translateX(4px); }
+      30%, 50%, 70% { transform: translate(-50%, -4px) scale(1.05) translateX(-6px); }
+      40%, 60% { transform: translate(-50%, 3px) scale(0.95) translateX(6px); }
     }
     /* Individual button styles */
     .build-controls .btn {
@@ -281,7 +283,7 @@
     const starPos = new Float32Array(starCount * 3);
     for(let i=0;i<starCount;i++){
       const r = 500 + Math.random()*600;
-      const theta = Math.random()*Math.PI*2; const phi = Math.acos(2*Math.random()-1);
+      const theta = Math.random()*Math.PI*2; const phi = Math.acos(2*Math.random()-1); // phi is inclination
       starPos[i*3] = r*Math.sin(phi)*Math.cos(theta);
       starPos[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
       starPos[i*3+2] = r*Math.cos(phi);
@@ -454,6 +456,7 @@
         createRocketsAndTetris(earthGroup);
         createMoon(tex.moon);
         createOtherPlanets(tex);
+        createMeteoritesAndHunter(tex); // ¡NUEVA FUNCIÓN!
       }catch(err){ console.error('Error cargando texturas (fatal):', err); showErrorBanner('No fue posible inicializar texturas. Revisa conexión o usa versión offline.');
         // still create a minimal earth to avoid breaking the animation
         earthGroup = new THREE.Group(); const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(12,32,32), new THREE.MeshStandardMaterial({ color:0x2b6db0 })); earthGroup.add(earthMesh); scene.add(earthGroup); createRocketsAndTetris(earthGroup);
@@ -513,6 +516,10 @@
         const marsGeo = new THREE.SphereGeometry(4, 32, 32);
         const marsMat = new THREE.MeshStandardMaterial({ map: textures.mars });
         const mars = new THREE.Mesh(marsGeo, marsMat);
+      // Datos de órbita para Marte
+      mars.userData.orbitalRadius = 228;
+      mars.userData.orbitalSpeed = 0.005;
+      mars.userData.orbitalAngle = Math.random() * Math.PI * 2;
         mars.position.set(150, -20, -150);
         mars.name = "Mars";
         planetGroup.add(mars);
@@ -523,6 +530,10 @@
         const jupiterGeo = new THREE.SphereGeometry(25, 32, 32);
         const jupiterMat = new THREE.MeshStandardMaterial({ map: textures.jupiter });
         const jupiter = new THREE.Mesh(jupiterGeo, jupiterMat);
+        // Datos de órbita para Júpiter
+        jupiter.userData.orbitalRadius = 400;
+        jupiter.userData.orbitalSpeed = 0.002;
+        jupiter.userData.orbitalAngle = Math.random() * Math.PI * 2;
         jupiter.position.set(-300, 50, -400);
         jupiter.name = "Jupiter";
         planetGroup.add(jupiter);
@@ -538,6 +549,10 @@
         const ring = new THREE.Mesh(ringGeo, ringMat);
         ring.rotation.x = Math.PI / 2;
         saturn.add(ring);
+        // Datos de órbita para Saturno
+        saturn.userData.orbitalRadius = 550;
+        saturn.userData.orbitalSpeed = 0.001;
+        saturn.userData.orbitalAngle = Math.random() * Math.PI * 2;
         saturn.position.set(400, -40, -200);
         saturn.name = "Saturn";
         planetGroup.add(saturn);
@@ -548,6 +563,10 @@
         const venusGeo = new THREE.SphereGeometry(6, 32, 32);
         const venusMat = new THREE.MeshStandardMaterial({ map: textures.venus });
         const venus = new THREE.Mesh(venusGeo, venusMat);
+        // Datos de órbita para Venus
+        venus.userData.orbitalRadius = 108;
+        venus.userData.orbitalSpeed = 0.008;
+        venus.userData.orbitalAngle = Math.random() * Math.PI * 2;
         venus.position.set(-80, 10, 120);
         venus.name = "Venus";
         planetGroup.add(venus);
@@ -559,6 +578,10 @@
         const uranusMat = new THREE.MeshStandardMaterial({ map: textures.uranus });
         const uranus = new THREE.Mesh(uranusGeo, uranusMat);
         uranus.rotation.z = 97.77 * (Math.PI / 180); // Uranus's extreme axial tilt
+        // Datos de órbita para Urano
+        uranus.userData.orbitalRadius = 650;
+        uranus.userData.orbitalSpeed = 0.0008;
+        uranus.userData.orbitalAngle = Math.random() * Math.PI * 2;
         uranus.position.set(500, 100, 100);
         uranus.name = "Uranus";
         planetGroup.add(uranus);
@@ -569,6 +592,10 @@
         const neptuneGeo = new THREE.SphereGeometry(14, 32, 32);
         const neptuneMat = new THREE.MeshStandardMaterial({ map: textures.neptune });
         const neptune = new THREE.Mesh(neptuneGeo, neptuneMat);
+        // Datos de órbita para Neptuno
+        neptune.userData.orbitalRadius = 750;
+        neptune.userData.orbitalSpeed = 0.0005;
+        neptune.userData.orbitalAngle = Math.random() * Math.PI * 2;
         neptune.position.set(-450, -80, 250);
         neptune.name = "Neptune";
         planetGroup.add(neptune);
@@ -578,11 +605,124 @@
       const mercuryGeo = new THREE.SphereGeometry(2, 32, 32);
       const mercuryMat = new THREE.MeshStandardMaterial({ color: '#888888', metalness: 0.1, roughness: 0.8 });
       const mercury = new THREE.Mesh(mercuryGeo, mercuryMat);
+      // Datos de órbita para Mercurio
+      mercury.userData.orbitalRadius = 58;
+      mercury.userData.orbitalSpeed = 0.01;
+      mercury.userData.orbitalAngle = Math.random() * Math.PI * 2;
       mercury.position.set(50, 5, 80);
       mercury.name = "Mercury";
       planetGroup.add(mercury);
 
       scene.add(planetGroup);
+      objectsGroup.add(planetGroup); // Añadimos el grupo de planetas a objectsGroup para animarlos
+    }
+
+    // --- ¡NUEVO! Creación de Meteoritos y Nave Cazadora ---
+    let alienHunterGroup, meteoriteGroup;
+
+    function createMeteoritesAndHunter(textures) {
+      meteoriteGroup = new THREE.Group();
+      scene.add(meteoriteGroup);
+
+      alienHunterGroup = new THREE.Group();
+      scene.add(alienHunterGroup);
+
+      // Cargar textura de asteroide (con fallback)
+      const asteroidTexture = textures.asteroid || createFallbackPlanetTexture('#4a443b');
+
+      // Crear 50 meteoritos (antes eran 20)
+      for (let i = 0; i < 50; i++) {
+        createMeteorite(asteroidTexture);
+      }
+
+      // Crear 3 naves cazadoras
+      for (let i = 0; i < 3; i++) {
+        createSingleHunter();
+      }
+    }
+
+    function createSingleHunter() {
+      const hunter = new THREE.Group();
+      const hunterBodyMat = new THREE.MeshStandardMaterial({ color: 0x2c3e50, metalness: 0.8, roughness: 0.4 });
+      const hunterCockpitMat = new THREE.MeshStandardMaterial({ color: 0xe74c3c, emissive: 0xc0392b, emissiveIntensity: 2 });
+
+      const mainBody = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 8), hunterBodyMat);
+      mainBody.rotation.z = Math.PI / 2;
+      hunter.add(mainBody);
+
+      const cockpit = new THREE.Mesh(new THREE.SphereGeometry(1), hunterCockpitMat);
+      cockpit.position.x = 1;
+      hunter.add(cockpit);
+
+      // Posición inicial aleatoria para cada nave
+      hunter.position.set((Math.random() - 0.5) * 200, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 200);
+      // Cada nave tiene su propio estado
+      hunter.userData = { target: null, fireCooldown: Math.random() * 2 }; // Cooldown inicial aleatorio
+      alienHunterGroup.add(hunter);
+    }
+
+    function createMeteorite(texture) {
+      // Usamos Icosahedron para una forma más irregular que una esfera
+      const geo = new THREE.IcosahedronGeometry(Math.random() * 2 + 0.5, 0);
+      const mat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.8 });
+      const meteorite = new THREE.Mesh(geo, mat);
+
+      // Posición inicial aleatoria fuera de la vista principal
+      const r = 800 + Math.random() * 200;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      meteorite.position.set(r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta), r * Math.cos(phi));
+
+      // Velocidad y dirección aleatorias
+      meteorite.userData.velocity = new THREE.Vector3(
+        (Math.random() - 0.5) * 0.5,
+        (Math.random() - 0.5) * 0.5,
+        (Math.random() - 0.5) * 0.5
+      );
+      meteorite.name = "meteorite";
+      meteoriteGroup.add(meteorite);
+      return meteorite;
+    }
+
+    function createExplosion(position) {
+      const explosionGroup = new THREE.Group();
+      const particleCount = 20;
+      const particleMat = new THREE.PointsMaterial({
+        color: 0xffa500, size: 0.5, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+      });
+      const particlesGeo = new THREE.BufferGeometry();
+      const posArray = new Float32Array(particleCount * 3);
+      const velocities = [];
+
+      for (let i = 0; i < particleCount; i++) {
+        posArray[i * 3] = position.x;
+        posArray[i * 3 + 1] = position.y;
+        posArray[i * 3 + 2] = position.z;
+        velocities.push(new THREE.Vector3((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).multiplyScalar(0.5));
+      }
+      particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const explosion = new THREE.Points(particlesGeo, particleMat);
+      explosion.userData = { velocities, life: 1.0 };
+      scene.add(explosion);
+
+      // Animación de la explosión
+      function animateExplosion() {
+        explosion.userData.life -= 0.02;
+        if (explosion.userData.life <= 0) {
+          scene.remove(explosion);
+          return;
+        }
+        explosion.material.opacity = explosion.userData.life;
+        const positions = explosion.geometry.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          positions[i * 3] += explosion.userData.velocities[i].x;
+          positions[i * 3 + 1] += explosion.userData.velocities[i].y;
+          positions[i * 3 + 2] += explosion.userData.velocities[i].z;
+        }
+        explosion.geometry.attributes.position.needsUpdate = true;
+        requestAnimationFrame(animateExplosion);
+      }
+      animateExplosion();
     }
 
     function createSingleRocket() {
@@ -602,13 +742,83 @@
     const clock = new THREE.Clock();
     function animate(){
       const dt = clock.getDelta(); const t = clock.getElapsedTime();
+
+      // Animación de estrellas centelleantes
+      starPoints.material.opacity = 0.85 + Math.sin(t * 0.5) * 0.1;
+
+      // --- ¡NUEVO! Lógica de Caza y Movimiento de Meteoritos ---
+      if (meteoriteGroup && alienHunterGroup) {
+        // Mover meteoritos
+        meteoriteGroup.children.forEach(m => {
+          m.position.add(m.userData.velocity);
+          m.rotation.x += 0.01;
+          m.rotation.y += 0.005;
+          // Si se aleja mucho, lo reposicionamos
+          if (m.position.length() > 1500) { // Aumentamos la distancia para que viajen más lejos
+            const r = 800 + Math.random() * 200;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            m.position.set(r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta), r * Math.cos(phi));
+          }
+        });
+
+        // Lógica para cada nave cazadora en el grupo
+        alienHunterGroup.children.forEach(hunter => {
+          hunter.userData.fireCooldown = Math.max(0, hunter.userData.fireCooldown - dt);
+
+          if (!hunter.userData.target || hunter.userData.target.parent !== meteoriteGroup) {
+            // Buscar un nuevo objetivo si no tiene uno o si el actual fue destruido
+            if (meteoriteGroup.children.length > 0) {
+              hunter.userData.target = meteoriteGroup.children[Math.floor(Math.random() * meteoriteGroup.children.length)];
+            }
+          } else {
+            // Moverse hacia el objetivo
+            const targetPosition = hunter.userData.target.position;
+            hunter.lookAt(targetPosition);
+            const direction = new THREE.Vector3();
+            hunter.getWorldDirection(direction);
+            hunter.position.add(direction.multiplyScalar(0.8)); // Velocidad de la nave
+
+            // Comprobar si está cerca para disparar
+            if (hunter.position.distanceTo(targetPosition) < 50 && hunter.userData.fireCooldown === 0) {
+              // Disparar láser
+              const laserGeo = new THREE.CylinderGeometry(0.1, 0.1, 50, 8);
+              const laserMat = new THREE.MeshBasicMaterial({ color: 0xe74c3c, transparent: true, opacity: 0.8 });
+              const laser = new THREE.Mesh(laserGeo, laserMat);
+              laser.position.copy(hunter.position);
+              laser.lookAt(targetPosition);
+              laser.rotation.x += Math.PI / 2; // Corregir orientación del cilindro
+              scene.add(laser);
+              setTimeout(() => scene.remove(laser), 100); // El láser es visible por 100ms
+
+              // Destruir meteorito y crear explosión
+              createExplosion(targetPosition);
+              meteoriteGroup.remove(hunter.userData.target);
+              hunter.userData.fireCooldown = 2 + Math.random(); // 2-3 segundos de espera antes de volver a disparar
+            }
+          }
+        });
+      }
+
       if (!isConstellationView && !isLoginView) {
         if(earthGroup){ earthGroup.children.forEach((ch, idx)=>{ if(idx===0) ch.rotation.y += 0.02 * dt * 60 * 0.07; else if(ch.material && ch.material.map && ch.material.map.image && idx===2) ch.rotation.y += 0.02 * dt * 60 * 0.09; }); }
         if(moonPivot) { moonPivot.rotation.y += 0.002; moonPivot.rotation.x += 0.0005; }
         // Subtle camera animation
         camera.position.x += Math.sin(t * 0.05) * 0.02;
         camera.position.y += Math.cos(t * 0.04) * 0.01;
-        objectsGroup.children.forEach(obj=> { if(obj.userData && obj.userData.radius){ obj.userData.theta += obj.userData.speed * (1 + Math.sin(t*0.5)*0.3); const r = obj.userData.radius; const th = obj.userData.theta; obj.position.set(Math.cos(th)*r, Math.sin(th*0.3)*3, Math.sin(th)*r); obj.lookAt(0,0,0); obj.rotateOnAxis(new THREE.Vector3(1,0,0), obj.userData.tilt); } else if(obj.userData && obj.userData.speed){ obj.rotateOnAxis(obj.userData.axis, obj.userData.speed * (1 + Math.sin(t*0.7)*0.6)); } });
+        objectsGroup.children.forEach(group => {
+          group.children.forEach(obj => {
+            // Animación para cohetes y gafas VR
+            if(obj.userData && obj.userData.radius){ obj.userData.theta += obj.userData.speed * (1 + Math.sin(t*0.5)*0.3); const r = obj.userData.radius; const th = obj.userData.theta; obj.position.set(Math.cos(th)*r, Math.sin(th*0.3)*3, Math.sin(th)*r); obj.lookAt(0,0,0); obj.rotateOnAxis(new THREE.Vector3(1,0,0), obj.userData.tilt); }
+            else if(obj.userData && obj.userData.axis){ obj.rotateOnAxis(obj.userData.axis, obj.userData.speed * (1 + Math.sin(t*0.7)*0.6)); }
+            // Nueva animación para la órbita de los planetas
+            else if (obj.userData && obj.userData.orbitalRadius) {
+              obj.userData.orbitalAngle += obj.userData.orbitalSpeed * dt * 60 * 0.1;
+              obj.position.x = Math.cos(obj.userData.orbitalAngle) * obj.userData.orbitalRadius;
+              obj.position.z = Math.sin(obj.userData.orbitalAngle) * obj.userData.orbitalRadius;
+            }
+          });
+        });
       } else if (constellationGroup) {
         constellationGroup.children.forEach(child => {
           if (child.userData.isStar) {

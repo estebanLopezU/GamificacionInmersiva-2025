@@ -22,6 +22,7 @@
       transform: translate(-50%, 30px) scale(0.95);
       transition: opacity 1s ease-out 0.5s, transform 1s ease-out 0.5s;
     }
+
     /* --- ✨ MEJORA DE BORDES: Gradiente Luminoso --- */
     .ui, .progress-ui, .modal-content, .login-form {
       position: relative; /* Necesario para el pseudo-elemento */
@@ -162,6 +163,104 @@
       text-align: left;
       color: #eaf6ff; /* Explicitly set light text color for info modal */
     }
+
+    /* --- ✨ Intro Title Animation --- */
+    #introTitleContainer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--bg);
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      pointer-events: none;
+    }
+    #introTitleContainer.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #introTitleContainer h1 {
+      margin: 0;
+      padding: 0;
+      font-family: "Luckiest Guy", cursive;
+      font-size: clamp(2em, 10vw, 8em);
+      color: white;
+      text-shadow: 0 0.1em 20px black, 0.05em -0.03em 0 black, 0.05em 0.005em 0 black, 0em 0.08em 0 black, 0.05em 0.08em 0 black, 0px -0.03em 0 black, -0.03em -0.03em 0 black, -0.03em 0.08em 0 black, -0.03em 0 0 black;
+      text-align: center;
+    }
+    #introTitleContainer h1 span {
+      transform: scale(0.9);
+      display: inline-block;
+    }
+    #introTitleContainer h1 span:first-child {
+      animation: bop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards infinite alternate;
+    }
+    #introTitleContainer h1 span:last-child {
+      animation: bopB 1s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards infinite alternate;
+    }
+
+    @keyframes bop {
+      0% {
+        transform: scale(0.9);
+      }
+      50%,
+      100% {
+        transform: scale(1);
+      }
+    }
+    @-webkit-keyframes bop {
+      0% { -webkit-transform: scale(0.9); }
+      50%, 100% { -webkit-transform: scale(1); }
+    }
+
+    @keyframes bopB {
+      0% {
+        transform: scale(0.9);
+      }
+      80%,
+      100% {
+        transform: scale(1) rotateZ(-3deg);
+      }
+    }
+    @-webkit-keyframes bopB {
+      0% { -webkit-transform: scale(0.9); }
+      80%, 100% { -webkit-transform: scale(1) rotateZ(-3deg); }
+    }
+
+    /* --- ✨ Sparkles for Intro --- */
+    #sparklesContainer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .sparkle {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
+      animation-name: sparkle-anim;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      opacity: 0;
+    }
+    @keyframes sparkle-anim {
+      0% { opacity: 0; transform: scale(0.5); }
+      20% { opacity: 1; transform: scale(1.2); }
+      40% { opacity: 0.5; transform: scale(0.8); }
+      60% { opacity: 1; transform: scale(1.1); }
+      80% { opacity: 0.2; transform: scale(0.6); }
+      100% { opacity: 0; transform: scale(0.5); }
+    }
+    @-webkit-keyframes sparkle-anim {
+      0% { opacity: 0; -webkit-transform: scale(0.5); }
+      50% { opacity: 1; -webkit-transform: scale(1.2); }
+      100% { opacity: 0; -webkit-transform: scale(0.5); }
+    }
   </style>
 
   <!-- Import map: asegura que los módulos de examples/jsm que usan la especifier 'three' puedan resolverla en el navegador -->
@@ -173,8 +272,17 @@
       }
     }
   </script>
+
+  <!-- Google Font for Intro Title -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div id="introTitleContainer">
+    <div id="sparklesContainer"></div>
+    <h1><span>Gamificación</span><br>con tecnologías<br><span>inmersivas</span></h1>
+  </div>
   <div id="app">
     <div class="ui" role="banner">
       <h1>Gamificación con tecnologías inmersivas</h1>
@@ -864,72 +972,89 @@
     // --- Epic Intro Animation ---
     // --- ¡NUEVO! Animación de Introducción tipo "Big Bang" ---
     function startIntroAnimation() {
+      const introTitleContainer = document.getElementById('introTitleContainer');
       const uiElements = document.querySelectorAll('.ui, .progress-ui, .credits');
       uiElements.forEach(el => { el.style.opacity = '0'; });
-
-      // --- CORRECCIÓN: Ocultar objetos aquí, DESPUÉS de que se hayan creado ---
+    
+      // Ocultar todos los objetos 3D al inicio
       if (earthGroup) earthGroup.visible = false;
       if (objectsGroup) objectsGroup.visible = false;
       if (alienHunterGroup) alienHunterGroup.visible = false;
       if (meteoriteGroup) meteoriteGroup.visible = false;
       if (moonPivot) moonPivot.visible = false;
+      if (starPoints) starPoints.visible = false;
+    
+      // 1. Mostrar el título animado
+      introTitleContainer.classList.add('show');
+    
+      // 2. Esperar y luego desvanecer el título para dar paso a la escena 3D
+      setTimeout(() => {
+        introTitleContainer.classList.remove('show');
+        
+        // 3. Iniciar la animación del "Big Bang" 3D después de que el título comience a desaparecer
+        setTimeout(runBigBangAnimation, 1000); // Esperar a que el fade-out del título sea visible
+      }, 4000); // Duración de la visualización del título
+    
+      function runBigBangAnimation() {
+        // Hacer visibles las estrellas para la animación
+        if (starPoints) starPoints.visible = true;
 
-      // 1. Configuración inicial para el Big Bang
-      controls.enabled = false;
-      camera.position.set(0, 0, 0.1); // Empezar muy cerca del centro
-      const originalBloomStrength = bloom.strength;
-      const originalBloomThreshold = bloom.threshold;
-      bloom.strength = 3.0; // Efecto de brillo intenso
-      bloom.threshold = 0;
-
-      const duration = 4000; // ms
-      let startTime = null;
-
-      const startPositions = starsGeometry.attributes.position;
-      const finalPositions = starsGeometry.attributes.finalPosition;
-
-      function animateIntro(time) {
-        if (!startTime) startTime = time;
-        const elapsed = time - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeOutProgress = 1 - Math.pow(1 - progress, 4); // Cubic ease-out
-
-        // 2. Animar las estrellas explotando hacia afuera
-        for (let i = 0; i < starCount; i++) {
-          const i3 = i * 3;
-          startPositions.array[i3] = finalPositions.array[i3] * easeOutProgress;
-          startPositions.array[i3 + 1] = finalPositions.array[i3 + 1] * easeOutProgress;
-          startPositions.array[i3 + 2] = finalPositions.array[i3 + 2] * easeOutProgress;
+        // Configuración inicial para el Big Bang
+        controls.enabled = false;
+        camera.position.set(0, 0, 0.1); // Empezar muy cerca del centro
+        const originalBloomStrength = bloom.strength;
+        const originalBloomThreshold = bloom.threshold;
+        bloom.strength = 3.0; // Efecto de brillo intenso
+        bloom.threshold = 0;
+    
+        const duration = 4000; // ms
+        let startTime = null;
+    
+        const startPositions = starsGeometry.attributes.position;
+        const finalPositions = starsGeometry.attributes.finalPosition;
+    
+        function animateIntro(time) {
+          if (!startTime) startTime = time;
+          const elapsed = time - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeOutProgress = 1 - Math.pow(1 - progress, 4); // Cubic ease-out
+    
+          // Animar las estrellas explotando hacia afuera
+          for (let i = 0; i < starCount; i++) {
+            const i3 = i * 3;
+            startPositions.array[i3] = finalPositions.array[i3] * easeOutProgress;
+            startPositions.array[i3 + 1] = finalPositions.array[i3 + 1] * easeOutProgress;
+            startPositions.array[i3 + 2] = finalPositions.array[i3 + 2] * easeOutProgress;
+          }
+          startPositions.needsUpdate = true;
+    
+          // Animar la cámara retrocediendo
+          camera.position.z = 0.1 + 59.9 * easeOutProgress;
+          camera.position.y = 18 * easeOutProgress;
+    
+          // Normalizar el brillo a medida que la explosión se disipa
+          bloom.strength = 3.0 * (1 - progress) + originalBloomStrength * progress;
+    
+          // Hacer aparecer el sistema solar a mitad de camino
+          if (progress > 0.5) {
+            if (earthGroup) earthGroup.visible = true;
+            if (objectsGroup) objectsGroup.visible = true;
+            if (alienHunterGroup) alienHunterGroup.visible = true;
+            if (meteoriteGroup) meteoriteGroup.visible = true;
+            if (moonPivot) moonPivot.visible = true;
+          }
+    
+          if (progress < 1) {
+            requestAnimationFrame(animateIntro);
+          } else {
+            // Finalizar y mostrar la UI
+            controls.enabled = true; // Enable controls after intro
+            bloom.threshold = originalBloomThreshold; // Restaurar bloom
+            uiElements.forEach(el => { el.style.transition = 'opacity 1s ease-out, transform 1s ease-out'; el.style.opacity = '1'; });
+          }
         }
-        startPositions.needsUpdate = true;
-
-        // 3. Animar la cámara retrocediendo
-        camera.position.z = 0.1 + 59.9 * easeOutProgress;
-        camera.position.y = 18 * easeOutProgress;
-
-        // 4. Normalizar el brillo a medida que la explosión se disipa
-        bloom.strength = 3.0 * (1 - progress) + originalBloomStrength * progress;
-
-        // 5. Hacer aparecer el sistema solar a mitad de camino
-        if (progress > 0.5) {
-          const fadeInProgress = (progress - 0.5) * 2;
-          if (earthGroup) earthGroup.visible = true;
-          if (objectsGroup) objectsGroup.visible = true;
-          if (alienHunterGroup) alienHunterGroup.visible = true;
-          if (meteoriteGroup) meteoriteGroup.visible = true;
-          if (moonPivot) moonPivot.visible = true;
-        }
-
-        if (progress < 1) {
-          requestAnimationFrame(animateIntro);
-        } else {
-          // 6. Finalizar y mostrar la UI
-          controls.enabled = true; // Enable controls after intro
-          bloom.threshold = originalBloomThreshold; // Restaurar bloom
-          uiElements.forEach(el => { el.style.transition = 'opacity 1s ease-out'; el.style.opacity = '1'; });
-        }
+        requestAnimationFrame(animateIntro);
       }
-      requestAnimationFrame(animateIntro);
     }
 
     createVRGoggles();
@@ -1316,8 +1441,28 @@
       requestAnimationFrame(animate);
     }
 
+    function createSparkles() {
+      const container = document.getElementById('sparklesContainer');
+      const numSparkles = 40;
+      for (let i = 0; i < numSparkles; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        const size = Math.random() * 3 + 1; // size between 1px and 4px
+        sparkle.style.width = `${size}px`;
+        sparkle.style.height = `${size}px`;
+        sparkle.style.top = `${Math.random() * 100}%`;
+        sparkle.style.left = `${Math.random() * 100}%`;
+        const duration = Math.random() * 3 + 2; // duration between 2s and 5s
+        const delay = Math.random() * 3; // delay up to 3s
+        sparkle.style.animationDuration = `${duration}s`;
+        sparkle.style.animationDelay = `${delay}s`;
+        container.appendChild(sparkle);
+      }
+    }
+
     createConstellationMenu();
 
+    createSparkles();
     startIntroAnimation();
 
   </script>

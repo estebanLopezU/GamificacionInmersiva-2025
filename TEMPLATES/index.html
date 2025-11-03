@@ -20,9 +20,14 @@
       min-width:260px;
       /* Dramatic intro animation */
       transform: translate(-50%, 30px) scale(0.95);
-      transition: opacity 1s ease-out 0.5s, transform 1s ease-out 0.5s;
+      transition: opacity 1s ease-out 0.5s, transform 1s ease-out 0.5s;      
+      /* Flexbox for alignment */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 12px 20px;
     }
-
     /* --- ✨ MEJORA DE BORDES: Gradiente Luminoso --- */
     .ui, .progress-ui, .modal-content, .login-form {
       position: relative; /* Necesario para el pseudo-elemento */
@@ -42,7 +47,12 @@
       mask-composite: exclude;
       z-index: -1; /* Se posiciona detrás del contenido del panel */
     }
-    .ui h1{margin:0;font-size:1.35rem;letter-spacing:-0.3px; text-align: center;}
+    .ui h1{flex-grow: 1; margin:0;font-size:1.35rem;letter-spacing:-0.3px; text-align: center;}
+    #helpBtn {
+      background: linear-gradient(90deg, #ffb86b, #ff7b7b); /* Orange/red gradient like infoBtn */
+      flex-shrink: 0; /* Prevent button from shrinking */
+    }
+
     .btn{background:linear-gradient(90deg,#78ffd6,#59d0ff);border:none;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}
 
     /* Progress UI */
@@ -75,12 +85,23 @@
     .close-button {
       color: #aaa; position: absolute; top: 10px; right: 20px;
       font-size: 28px; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s ease-in-out, color 0.2s;
     }
-    .close-button:hover, .close-button:focus { color: white; text-decoration: none; }
+    .close-button:hover, .close-button:focus { color: white; text-decoration: none; transform: rotate(90deg) scale(1.1); }
     .modal.show { display: flex; animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
+    }
+    /* --- ✨ Animación divertida para el Modal de Ayuda --- */
+    #helpModal.show .modal-content {
+      animation: dropInBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes dropInBounce {
+      0% { transform: translateY(-100vh) scale(0.7); opacity: 0; }
+      60% { transform: translateY(20px) scale(1.05); opacity: 1; }
+      80% { transform: translateY(-10px) scale(0.95); }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
     }
 
     /* Build Controls Container */
@@ -162,6 +183,20 @@
     #infoModal .modal-content {
       text-align: left;
       color: #eaf6ff; /* Explicitly set light text color for info modal */
+    }
+    /* --- ✨ Animación para el contenido del modal de ayuda --- */
+    #helpModal .animated-item {
+      opacity: 0; /* Oculto por defecto */
+      animation-fill-mode: forwards; /* Mantiene el estado final */
+    }
+    #helpModal.content-visible .animated-item {
+      animation-name: slideInUp;
+      animation-duration: 0.6s;
+      animation-timing-function: ease-out;
+    }
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* --- ✨ Intro Title Animation --- */
@@ -286,6 +321,7 @@
   <div id="app">
     <div class="ui" role="banner">
       <h1>Gamificación con tecnologías inmersivas</h1>
+      <button id="helpBtn" class="btn">Ayuda</button>
     </div>
 
     <div class="progress-ui">
@@ -336,6 +372,19 @@
         <h3 id="infoModalTitle"></h3>
         <p id="infoModalText"></p>
       </div>
+    </div>
+
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 class="animated-item" style="animation-delay: 0.3s;">¿Cómo empezar?</h3>
+            <p class="animated-item" style="text-align: left; margin-top: 15px; animation-delay: 0.5s;">
+                ¡Bienvenido al explorador del proyecto! Para comenzar, haz clic en el planeta <strong>Tierra</strong>. Desde allí podrás:<br><br>
+                - <strong>Ver Información:</strong> Descubre más sobre nuestra misión, visión y el proyecto en la constelación de información.<br>
+                - <strong>Iniciar Sesión:</strong> Accede a una vista detallada de la ciudad para interactuar con los módulos del proyecto.<br>
+                - <strong>Explorar en VR:</strong> Si tienes un visor de Realidad Virtual compatible, verás un botón para sumergirte por completo en la experiencia.
+            </p>
+        </div>
     </div>
   </div>
 
@@ -1082,6 +1131,9 @@
     const infoModalText = document.getElementById('infoModalText');
     const infoModalCloseBtn = infoModal.querySelector('.close-button');
     let buildControlsTimeout, isConstellationView = false, isLoginView = false;
+    const helpModal = document.getElementById('helpModal');
+    const helpBtn = document.getElementById('helpBtn');
+    const helpModalCloseBtn = helpModal.querySelector('.close-button');
 
     const planetInfo = {
       "Mercury": { title: "Mercurio, el Mensajero Veloz", text: "Diámetro: 4,879 km. Distancia al Sol: 58 millones de km. Dato curioso: A pesar de ser el más cercano al Sol, Mercurio no es el planeta más caliente. Experimenta temperaturas extremas, desde -173°C por la noche hasta 427°C durante el día." },
@@ -1141,6 +1193,15 @@
     function closeModal() {
       moonModal.classList.remove('show');
     }
+
+    function showHelpModal() {
+      helpModal.classList.add('show');
+      setTimeout(() => helpModal.classList.add('content-visible'), 200); // Activa la animación del contenido un poco después
+    }
+    function closeHelpModal() {
+      helpModal.classList.remove('show', 'content-visible');
+    }
+
 
     function hideBuildControls() {
       if (buildControls.classList.contains('show')) {
@@ -1276,6 +1337,11 @@
       event.stopPropagation();
       closeInfoModal();
     });
+    
+    helpBtn.addEventListener('click', (event) => { event.stopPropagation(); showHelpModal(); });
+    helpModalCloseBtn.addEventListener('click', closeHelpModal);
+    helpModal.addEventListener('click', (event) => { if (event.target === helpModal) closeHelpModal(); });
+
 
     const infoPoints = [
       { title: "Sobre Nosotros", text: "Somos un equipo apasionado por la innovación y la educación, dedicado a explorar cómo las tecnologías inmersivas pueden transformar el aprendizaje.", position: new THREE.Vector3(-50, 20, 0), color: 0xffb86b },

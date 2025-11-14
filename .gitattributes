@@ -1,0 +1,24 @@
+# Establece el comportamiento predeterminado para normalizar los finales de línea.
+# Git intentará adivinar si un archivo es de texto y convertirá sus finales de línea.
+* text=auto eol=lf
+
+# Archivos de texto que siempre deben tener finales de línea LF.
+*.css      text
+*.html     text
+*.js       text
+*.json     text
+*.jsx      text
+*.md       text
+*.mjs      text
+*.ts       text
+*.tsx      text
+*.yml      text
+*.yaml     text
+
+# Archivos que deben mantener sus finales de línea originales (generalmente binarios).
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.ico      binary
+*.svg      binary

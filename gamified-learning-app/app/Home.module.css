@@ -1,0 +1,32 @@
+/* Contenedor principal para asegurar que ocupe toda la pantalla */
+.mainContainer {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Evita barras de scroll no deseadas */
+}
+
+/* Estilos para el video de fondo */
+.backgroundVideo {
+  position: fixed; /* Fija el video en la ventana del navegador */
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1; /* Lo envía detrás de todo el contenido */
+  object-fit: cover; /* Asegura que el video cubra todo el espacio sin deformarse */
+  filter: brightness(0.7); /* Opcional: oscurece el video para que el texto sea más legible */
+}
+
+/* Contenido que irá por encima del video */
+.content {
+  position: relative; /* Asegura que tenga un contexto de apilamiento */
+  z-index: 1; /* Lo posiciona por encima del video */
+  color: white;
+  text-align: center;
+}

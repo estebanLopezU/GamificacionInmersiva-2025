@@ -341,51 +341,134 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative overflow-hidden">
-      {/* El video de fondo - Corregido el nombre del archivo */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className={`${styles.backgroundVideo} ${mounted ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}
-      >
-        <source src="/background-video.mp4" type="video/mp4" />
-        Tu navegador no soporta videos HTML5.
-      </video>
+      {/* Fondo animado con elementos de programación y matemáticas - VERSIÓN CSS PURO */}
+      <div className="fixed inset-0 z-0">
+        {/* Gradiente animado */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 animate-gradient-shift"></div>
+        
+        {/* Partículas flotantes con símbolos de programación */}
+        <div className="absolute inset-0">
+          {['{', '}', '(', ')', '[', ']', '<', '>', '/', '*', '+', '=', ';', '∫', '∑', '√', 'π', '∞'].map((symbol, i) => (
+            <div
+              key={i}
+              className="absolute text-white/20 text-4xl font-mono animate-float-particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${15 + Math.random() * 10}s`
+              }}
+            >
+              {symbol}
+            </div>
+          ))}
+        </div>
 
-      {/* Overlay oscuro para mejorar la legibilidad del contenido */}
-      <div className={`fixed inset-0 bg-black/50 z-0 ${mounted ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}></div>
+        {/* Elementos 3D con CSS puro */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Cohete espacial CSS */}
+          <div className="absolute top-20 left-20 animate-rocket-fly">
+            <div className="relative">
+              <div className="w-8 h-12 bg-red-500 rounded-t-full relative">
+                <div className="absolute top-2 left-2 w-4 h-4 bg-red-300 rounded-full"></div>
+              </div>
+              <div className="w-4 h-6 bg-red-600 mx-auto"></div>
+              <div className="flex justify-center">
+                <div className="w-2 h-4 bg-orange-400 transform rotate-45 origin-top"></div>
+                <div className="w-2 h-4 bg-orange-400 transform -rotate-45 origin-top"></div>
+              </div>
+            </div>
+          </div>
 
-      {/* Elementos decorativos animados */}
-      <div className="fixed top-20 left-10 w-20 h-20 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
-      <div className="fixed bottom-20 right-10 w-32 h-32 bg-purple-500/20 rounded-full blur-xl animate-pulse" style={{animationDelay: "1s"}}></div>
-      <div className="fixed top-1/2 left-1/3 w-16 h-16 bg-cyan-500/20 rounded-full blur-xl animate-pulse" style={{animationDelay: "2s"}}></div>
+          {/* Cubos de código animados */}
+          <div className="absolute top-40 right-32 animate-spin-slow">
+            <div className="w-16 h-16 bg-blue-500/30 border-2 border-blue-400/50 flex items-center justify-center text-blue-300 font-bold text-2xl">
+              {'</>'}
+            </div>
+          </div>
 
-      {/* El contenido de tu página irá aquí */}
+          <div className="absolute bottom-32 left-40 animate-pulse-slow">
+            <div className="w-20 h-20 bg-green-500/30 border-2 border-green-400/50 flex items-center justify-center text-green-300 font-bold text-2xl transform rotate-45">
+              {'[]'}
+            </div>
+          </div>
+
+          {/* Símbolos matemáticos 3D */}
+          <div className="absolute top-1/2 left-1/3 animate-spin-slow">
+            <div className="text-white/20 text-4xl">π</div>
+          </div>
+
+          <div className="absolute bottom-1/4 right-1/4 animate-pulse-slow">
+            <div className="text-white/20 text-4xl">∑</div>
+          </div>
+
+          <div className="absolute top-1/2 left-1/2 animate-spin-slow">
+            <div className="text-white/20 text-4xl">∫</div>
+          </div>
+
+          {/* Figuras geométricas animadas */}
+          <div className="absolute top-1/4 right-1/4 w-32 h-32 border-4 border-cyan-400/20 rounded-full animate-spin-slow"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-24 h-24 border-4 border-purple-400/20 rounded-lg animate-bounce-slow"></div>
+          <div className="absolute top-1/2 left-1/2 w-40 h-40 border-4 border-pink-400/20 transform rotate-45 animate-pulse-slow"></div>
+
+          {/* Ecuaciones flotantes */}
+          <div className="absolute top-1/3 right-1/4 animate-float-equation">
+            <div className="text-white/20 font-mono text-2xl">
+              x² + y² = r²
+            </div>
+          </div>
+
+          <div className="absolute bottom-1/3 left-1/3 animate-float-equation">
+            <div className="text-white/20 font-mono text-2xl">
+              f(x) = x²
+            </div>
+          </div>
+
+          {/* Efecto de estrellas */}
+          <div className="absolute inset-0">
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* El contenido de tu página */}
       <div className={`relative z-10 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'} transition-all duration-1000`}>
         {/* Encabezado */}
-        <header className="fixed top-0 left-0 w-full bg-white shadow-lg z-30">
+        <header className="fixed top-0 left-0 w-full bg-white/10 backdrop-blur-lg border-b border-white/20 shadow-2xl z-30 animate-slide-down">
           <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="relative">
-                <Image src="/UNAL.webp" alt="Logo UNAL" width={40} height={40} className="hover:rotate-12 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-blue-500/20 rounded-full animate-ping"></div>
+              <div className="relative group">
+                <Image src="/UNAL.webp" alt="Logo UNAL" width={50} height={50} className="hover:rotate-12 transition-all duration-300 drop-shadow-lg group-hover:scale-110" />
+                <div className="absolute inset-0 bg-blue-500/30 rounded-full animate-ping"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full opacity-0 group-hover:opacity-30 blur transition-all duration-300"></div>
               </div>
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-2xl font-bold text-white drop-shadow-lg animate-glow">
                 Centro de Información de Realidad Virtual
               </h1>
             </div>
             
-            {/* Botón de "empezar modo VR" que redirige a la página de juegos - Corregida la ruta */}
+            {/* Botón de "empezar modo VR" que redirige a la página de juegos */}
             <Link 
               href="/games" 
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 hover:scale-105 hover:shadow-xl"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 hover:scale-105 hover:shadow-xl group relative"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
               Empezar modo VR
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full opacity-0 group-hover:opacity-30 blur transition-all duration-300"></div>
             </Link>
           </div>
         </header>
@@ -395,9 +478,9 @@ export default function Home() {
           <div className="flex flex-col md:flex-row gap-8">
             {/* Menú de Navegación (Sidebar) */}
             <aside className={`w-full md:w-1/4 ${mounted ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'} transition-all duration-700`} style={{transitionDelay: "0.2s"}}>
-              <nav className="sticky top-28 bg-white rounded-lg shadow-lg p-4 border border-gray-100">
-                <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2 flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <nav className="sticky top-28 bg-white/10 backdrop-blur-xl rounded-lg shadow-lg p-4 border border-white/20">
+                <h2 className="text-lg font-bold text-white mb-4 border-b pb-2 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                   Secciones
@@ -410,10 +493,10 @@ export default function Home() {
                         className={`w-full text-left px-4 py-3 rounded-md transition-all duration-300 flex items-center text-base ${
                           selectedSection === item.id
                             ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold shadow-md transform scale-105"
-                            : "hover:bg-gray-100 text-gray-800 hover:translate-x-1"
+                            : "hover:bg-white/10 text-white/90 hover:translate-x-1"
                         }`}
                       >
-                        <span className={`w-2 h-2 rounded-full mr-2 ${selectedSection === item.id ? "bg-white animate-pulse" : "bg-gray-400"}`}></span>
+                        <span className={`w-2 h-2 rounded-full mr-2 ${selectedSection === item.id ? "bg-white animate-pulse" : "bg-white/60"}`}></span>
                         {item.title}
                       </button>
                     </li>
@@ -424,7 +507,7 @@ export default function Home() {
 
             {/* Área de Contenido */}
             <div className={`w-full md:w-3/4 ${mounted ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'} transition-all duration-700`} style={{transitionDelay: "0.4s"}}>
-              <section className={`bg-white rounded-lg shadow-lg p-10 min-h-[60vh] transition-all duration-300 ${
+              <section className={`bg-white/10 backdrop-blur-xl rounded-lg shadow-lg p-10 min-h-[60vh] transition-all duration-300 ${
                 isAnimating ? 'opacity-0 transform scale-95' : 'opacity-100 transform scale-100'
               }`}>
                 {selectedContent ? (
@@ -432,7 +515,7 @@ export default function Home() {
                     {selectedContent}
                   </div>
                 ) : (
-                  <div className="text-center text-gray-600">
+                  <div className="text-center text-white/80">
                     <h3 className="text-xl font-semibold">Bienvenido</h3>
                     <p>
                       Selecciona una sección del menú para ver la información.
@@ -496,28 +579,195 @@ export default function Home() {
           }
         }
         
+        @keyframes slide-down {
+          from {
+            opacity: 0;
+            transform: translateY(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes float-particle {
+          0%, 100% {
+            transform: translateY(0) translateX(0) rotate(0deg);
+            opacity: 0.6;
+          }
+          25% {
+            transform: translateY(-20px) translateX(10px) rotate(5deg);
+            opacity: 1;
+          }
+          50% {
+            transform: translateY(-10px) translateX(-10px) rotate(-5deg);
+            opacity: 0.8;
+          }
+          75% {
+            transform: translateY(-30px) translateX(5px) rotate(3deg);
+            opacity: 0.4;
+          }
+        }
+        
+        @keyframes spin-slow {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        
+        @keyframes spin-reverse-slow {
+          from {
+            transform: rotate(360deg);
+          }
+          to {
+            transform: rotate(0deg);
+          }
+        }
+        
+        @keyframes bounce-slow {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        
+        @keyframes pulse-slow {
+          0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.6;
+            transform: scale(1.05);
+          }
+        }
+        
+        @keyframes gradient-shift {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+        
+        @keyframes glow {
+          0%, 100% {
+            text-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+          }
+          50% {
+            text-shadow: 0 0 30px rgba(147, 51, 234, 0.8), 0 0 40px rgba(147, 51, 234, 0.6);
+          }
+        }
+        
+        @keyframes rocket-fly {
+          0% {
+            transform: translateX(0) translateY(0) rotate(-45deg);
+          }
+          25% {
+            transform: translateX(100px) translateY(-50px) rotate(-30deg);
+          }
+          50% {
+            transform: translateX(200px) translateY(-30px) rotate(-60deg);
+          }
+          75% {
+            transform: translateX(100px) translateY(-60px) rotate(-40deg);
+          }
+          100% {
+            transform: translateX(0) translateY(0) rotate(-45deg);
+          }
+        }
+        
+        @keyframes float-equation {
+          0%, 100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0.6;
+          }
+          50% {
+            transform: translateY(-20px) translateX(10px);
+            opacity: 1;
+          }
+        }
+        
+        @keyframes twinkle {
+          0%, 100% {
+            opacity: 0;
+            transform: scale(0);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
         .animate-fadeIn {
           animation: fadeIn 0.6s ease-out;
         }
         
         .animate-slideInLeft {
-          animation: slideInLeft 0.6s ease-out forwards;
-          opacity: 0;
+          animation: slideInLeft 0.8s ease-out;
         }
         
         .animate-slideInRight {
-          animation: slideInRight 0.6s ease-out forwards;
-          opacity: 0;
+          animation: slideInRight 0.8s ease-out;
         }
         
         .animate-slideInBottom {
-          animation: slideInBottom 0.6s ease-out forwards;
-          opacity: 0;
+          animation: slideInBottom 0.6s ease-out;
         }
         
         .animate-scaleIn {
-          animation: scaleIn 0.6s ease-out forwards;
-          opacity: 0;
+          animation: scaleIn 0.6s ease-out;
+        }
+        
+        .animate-slide-down {
+          animation: slide-down 0.6s ease-out;
+        }
+        
+        .animate-float-particle {
+          animation: float-particle 20s ease-in-out infinite;
+        }
+        
+        .animate-spin-slow {
+          animation: spin-slow 20s linear infinite;
+        }
+        
+        .animate-spin-reverse-slow {
+          animation: spin-reverse-slow 15s linear infinite;
+        }
+        
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+        }
+        
+        .animate-pulse-slow {
+          animation: pulse-slow 4s ease-in-out infinite;
+        }
+        
+        .animate-gradient-shift {
+          background-size: 200% 200%;
+          animation: gradient-shift 15s ease infinite;
+        }
+        
+        .animate-glow {
+          animation: glow 2s ease-in-out infinite;
+        }
+        
+        .animate-rocket-fly {
+          animation: rocket-fly 15s ease-in-out infinite;
+        }
+        
+        .animate-float-equation {
+          animation: float-equation 8s ease-in-out infinite;
+        }
+        
+        .animate-twinkle {
+          animation: twinkle 3s ease-in-out infinite;
         }
       `}</style>
     </main>

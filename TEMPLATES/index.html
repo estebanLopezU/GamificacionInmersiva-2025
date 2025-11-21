@@ -93,6 +93,7 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
     /* --- ✨ Animación divertida para el Modal de Ayuda --- */
     #helpModal.show .modal-content {
       animation: dropInBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -103,6 +104,7 @@
       80% { transform: translateY(-10px) scale(0.95); }
       100% { transform: translateY(0) scale(1); opacity: 1; }
     }
+
 
     /* Build Controls Container */
     .build-controls {
@@ -366,6 +368,20 @@
       <p class="sub-text"><a href="#">¿Aún no tienes cuenta? Regístrate</a></p>
     </div>
 
+    <div id="adminLoginForm" class="login-form">
+      <h2>Acceso de Administrador</h2>
+      <div class="input-group">
+        <label for="adminId">ID de Administrador</label>
+        <input type="text" id="adminId" name="adminId">
+      </div>
+      <div class="input-group">
+        <label for="accessLevel">Nivel de Acceso</label>
+        <input type="text" id="accessLevel" name="accessLevel">
+      </div>
+      <button class="btn">Ingresar</button>
+      <button id="cancelAdminLoginBtn" class="btn" style="background: #6c757d; margin-top: 10px;">Cancelar</button>
+    </div>
+
     <div id="infoModal" class="modal">
       <div class="modal-content">
         <span class="close-button">&times;</span>
@@ -385,6 +401,17 @@
                 - <strong>Explorar en VR:</strong> Si tienes un visor de Realidad Virtual compatible, verás un botón para sumergirte por completo en la experiencia.
             </p>
         </div>
+    </div>
+
+    <div id="userTypeModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h3>¿Cómo deseas acceder?</h3>
+        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+          <button id="selectUserBtn" class="btn">Usuario</button>
+          <button id="selectAdminBtn" class="btn" style="background: linear-gradient(90deg, #ffb86b, #ff7b7b);">Administrador</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1132,6 +1159,7 @@
     const accessBtn = document.getElementById('accessBtn');
     const cancelBtn = document.getElementById('cancelBtn');
     const loginForm = document.getElementById('loginForm');
+    const adminLoginForm = document.getElementById('adminLoginForm');
     const cancelLoginBtn = document.getElementById('cancelLoginBtn');
     const cityView = document.getElementById('cityView');
     const infoModal = document.getElementById('infoModal');
@@ -1142,6 +1170,11 @@
     const helpModal = document.getElementById('helpModal');
     const helpBtn = document.getElementById('helpBtn');
     const helpModalCloseBtn = helpModal.querySelector('.close-button');
+    const userTypeModal = document.getElementById('userTypeModal');
+    const userTypeModalCloseBtn = userTypeModal.querySelector('.close-button');
+    const selectUserBtn = document.getElementById('selectUserBtn');
+    const selectAdminBtn = document.getElementById('selectAdminBtn');
+    const cancelAdminLoginBtn = document.getElementById('cancelAdminLoginBtn');
 
     const planetInfo = {
       "Mercury": { title: "Mercurio, el Mensajero Veloz", text: "Diámetro: 4,879 km. Distancia al Sol: 58 millones de km. Dato curioso: A pesar de ser el más cercano al Sol, Mercurio no es el planeta más caliente. Experimenta temperaturas extremas, desde -173°C por la noche hasta 427°C durante el día." },
@@ -1211,6 +1244,11 @@
     }
     function closeHelpModal() {
       helpModal.classList.remove('show', 'content-visible');
+      uiSounds.close.play();
+    }
+
+    function closeUserTypeModal() {
+      userTypeModal.classList.remove('show');
       uiSounds.close.play();
     }
 
@@ -1343,12 +1381,33 @@
       event.stopPropagation();
       clearTimeout(buildControlsTimeout);
       hideBuildControls();
-      travelToLogin();
+      userTypeModal.classList.add('show');
+      uiSounds.open.play();
+    });
+
+    selectUserBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      closeUserTypeModal();
+      travelToLogin(false); // false indica que es para usuario normal
+    });
+
+    selectAdminBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      closeUserTypeModal();
+      travelToLogin(true); // true indica que es para administrador
     });
     cancelLoginBtn.addEventListener('click', (event) => {
       uiSounds.close.play();
       event.stopPropagation();
       loginForm.style.display = 'none';
+      cityView.style.opacity = 0;
+      travelToEarth();
+    });
+
+    cancelAdminLoginBtn.addEventListener('click', (event) => {
+      uiSounds.close.play();
+      event.stopPropagation();
+      adminLoginForm.style.display = 'none';
       cityView.style.opacity = 0;
       travelToEarth();
     });
@@ -1364,6 +1423,8 @@
     });
     helpModalCloseBtn.addEventListener('click', closeHelpModal);
     helpModal.addEventListener('click', (event) => { if (event.target === helpModal) closeHelpModal(); });
+    userTypeModalCloseBtn.addEventListener('click', closeUserTypeModal);
+    userTypeModal.addEventListener('click', (event) => { if (event.target === userTypeModal) closeUserTypeModal(); });
 
 
     const infoPoints = [
@@ -1465,7 +1526,7 @@
       { lat: 1.1, lon: 2.4 }    // East Asia/Japan
     ];
 
-    function travelToLogin() {
+    function travelToLogin(isAdmin) {
       isLoginView = true;
       document.querySelectorAll('.ui, .progress-ui, .credits').forEach(el => el.style.opacity = 0);
 
@@ -1478,7 +1539,13 @@
         cityView.style.opacity = 1;
         renderer.domElement.style.transition = 'opacity 1s';
         renderer.domElement.style.opacity = 0;
-        setTimeout(() => { loginForm.style.display = 'block'; loginForm.style.animation = 'fadeIn 0.5s ease-out'; }, 1000);
+        setTimeout(() => {
+          if (isAdmin) {
+            adminLoginForm.style.display = 'block'; adminLoginForm.style.animation = 'fadeIn 0.5s ease-out';
+          } else {
+            loginForm.style.display = 'block'; loginForm.style.animation = 'fadeIn 0.5s ease-out';
+          }
+        }, 1000);
       });
     }
 

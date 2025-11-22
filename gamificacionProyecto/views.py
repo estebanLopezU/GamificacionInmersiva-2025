@@ -1,7 +1,12 @@
 from django.shortcuts import render
 
-def index_view(request):
-    """
-    Esta vista se encarga de renderizar y mostrar la página principal.
-    """
+# Vista para la página de inicio
+def index(request):
     return render(request, 'index.html')
+
+# Vista para la página de login
+# Django ya provee vistas de login, así que esta podría no ser necesaria
+# a menos que quieras personalizarla mucho.
+# from django.contrib.auth.views import LoginView
+# class CustomLoginView(LoginView):
+#     template_name = 'login.html'

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'usuarios',  # Deshabilitada temporalmente
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,17 @@ WSGI_APPLICATION = 'gamificacionProyecto.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+#BDgamificacion
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'sqlunalgame',          # El nombre que elegiste en el Paso 1
+         'USER': 'root',        # El usuario que creaste en el Paso 1
+         'PASSWORD': '', # La contraseña que elegiste en el Paso 1
+         'HOST': '127.0.0.1',          # O la IP del servidor de la base de datos
+         'PORT': '3306',               # El puerto por defecto de MySQL
+     }
+ }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
@@ -83,12 +94,6 @@ WSGI_APPLICATION = 'gamificacionProyecto.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
@@ -131,3 +136,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Le decimos a Django que use nuestro modelo de usuario personalizado
+# Esta línea es crucial.
+# AUTH_USER_MODEL = 'usuarios.Usuario' # Deshabilitado temporalmente
+

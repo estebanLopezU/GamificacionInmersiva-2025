@@ -1,5 +1,8 @@
 {
-  "dependencies": {
-    "openai": "^6.9.1"
+  "name": "gamificacion-inmersiva",
+  "version": "1.0.0",
+  "description": "Proyecto de Gamificación con Django y Three.js",
+  "scripts": {
+    "dev": "python manage.py runserver"
   }
 }

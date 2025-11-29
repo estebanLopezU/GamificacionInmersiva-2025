@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-i%@bic3#^-4c$9vis(onllo4k=zwaovq59huq0&$9u(yz*%#67
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django']
 
 
 # Application definition
@@ -37,11 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'usuarios',  # Deshabilitada temporalmente
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
+    'authentication',  # Nueva app para autenticación
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -55,7 +60,7 @@ ROOT_URLCONF = 'gamificacionProyecto.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'TEMPLATES'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,27 +77,28 @@ WSGI_APPLICATION = 'gamificacionProyecto.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-#BDgamificacion
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'sqlunalgame',          # El nombre que elegiste en el Paso 1
-         'USER': 'root',        # El usuario que creaste en el Paso 1
-         'PASSWORD': '', # La contraseña que elegiste en el Paso 1
-         'HOST': '127.0.0.1',          # O la IP del servidor de la base de datos
-         'PORT': '3306',               # El puerto por defecto de MySQL
-     }
- }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'gamificacion_db',          # El nombre que elegiste en el Paso 1
-#         'USER': 'gamificacion_user',        # El usuario que creaste en el Paso 1
-#         'PASSWORD': 'tu_contraseña_segura', # La contraseña que elegiste en el Paso 1
-#         'HOST': 'localhost',          # O la IP del servidor de la base de datos
-#         'PORT': '3306',               # El puerto por defecto de MySQL
-#     }
-# }
+
+# Database configuration - use SQLite for local development, PostgreSQL for Docker
+if os.environ.get('DB_HOST'):
+    # Running in Docker with PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'gamificacion_db',
+            'USER': 'gamificacion_user',
+            'PASSWORD': 'gamificacion_password',
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': '5432',
+        }
+    }
+else:
+    # Local development with SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 
@@ -137,7 +143,42 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Configuración de CORS
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Allow all headers including Authorization
+CORS_ALLOW_ALL_HEADERS = True
+
+# Configuración de REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+
+
+# CSRF Settings para permitir requests desde React
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+
 # Le decimos a Django que use nuestro modelo de usuario personalizado
 # Esta línea es crucial.
-# AUTH_USER_MODEL = 'usuarios.Usuario' # Deshabilitado temporalmente
+AUTH_USER_MODEL = 'authentication.CustomUser'
 
+# Session settings for cross-origin authentication
+SESSION_COOKIE_DOMAIN = None  # Default
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_HTTPONLY = True  # Keep HTTPOnly for security
+SESSION_COOKIE_SECURE = False  # Allow HTTP for development

@@ -1,0 +1,55 @@
+
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    networks:
+      - gamification-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gamificacion_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  django:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=db
+      - POSTGRES_DB=gamificacion_db
+      - POSTGRES_USER=gamificacion_user
+      - POSTGRES_PASSWORD=gamificacion_password
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - gamification-network
+
+  react:
+    working_dir: /app/gamified-learning-app
+    image: node:20
+    command: sh -c "npm install && npm run dev -- -H 0.0.0.0"
+    volumes:
+      - ./gamified-learning-app:/app/gamified-learning-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - gamification-network
+
+networks:
+  gamification-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

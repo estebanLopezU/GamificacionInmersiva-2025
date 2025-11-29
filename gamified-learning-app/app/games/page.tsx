@@ -73,55 +73,198 @@ export default function Games() {
     { id: 'javascript', name: 'JavaScript', color: '#f7df1e' }
   ];
 
-  const fundamentalsContentByLanguage: Record<string, Record<string, { title: string; content: string }>> = {
+  // NIVEL APRENDIZ Y PROGRAMADOR: Contenido de los fundamentos por lenguaje y nivel
+  const fundamentalsContentByLanguage: Record<string, Record<number, Record<string, { title: string; content: string }>>> = {
     javascript: {
-      intro: {
-        title: "¿Qué es la Programación?",
-        content: "La programación es el proceso de crear instrucciones que una computadora puede seguir para realizar tareas específicas. Es como escribir una receta detallada que la computadora ejecuta paso a paso."
+      // Contenido para el Nivel 0: APRENDIZ
+      0: {
+        intro: {
+          title: "¿Qué es la Programación?",
+          content: "La programación es el proceso de crear instrucciones que una computadora puede seguir para realizar tareas específicas. Es como escribir una receta detallada que la computadora ejecuta paso a paso."
+        },
+        helloworld: {
+          title: "Hola Mundo en JavaScript",
+          content: `El programa 'Hola Mundo' es tradicionalmente el primer programa. En JavaScript, para mostrar un mensaje en la consola del navegador, se usa <code>console.log()</code>.<pre><code>console.log("Hola Mundo");</code></pre>`
+        },
+        operations: {
+          title: "Operaciones Aritméticas en JavaScript",
+          content: `JavaScript permite realizar operaciones matemáticas:<ul><li>Suma: <code>5 + 3</code></li><li>Resta: <code>10 - 4</code></li><li>Multiplicación: <code>4 * 5</code></li><li>División: <code>20 / 4</code></li><li>Raíz cuadrada: <code>Math.sqrt(25)</code></li></ul>`
+        },
+        variables: {
+          title: "Variables en JavaScript",
+          content: `En JavaScript, se usan <code>let</code> o <code>const</code> para declarar variables.<ul><li>Número: <code>let edad = 25;</code></li><li>Texto: <code>let nombre = "Ana";</code></li><li>Constante: <code>const PI = 3.14;</code></li></ul>`
+        },
+        text: {
+          title: "Manipulación de Texto en JavaScript",
+          content: `JavaScript ofrece métodos para trabajar con cadenas de texto (strings).<ul><li>Concatenación: <code>"Hola" + " Mundo"</code></li><li>Longitud: <code>"Hola".length</code></li><li>Mayúsculas: <code>"hola".toUpperCase()</code></li></ul>`
+        }
       },
-      helloworld: {
-        title: "Hola Mundo en JavaScript",
-        content: `El programa 'Hola Mundo' es tradicionalmente el primer programa. En JavaScript, para mostrar un mensaje en la consola del navegador, se usa <code>console.log()</code>.<pre><code>console.log("Hola Mundo");</code></pre>`
-      },
-      operations: {
-        title: "Operaciones Aritméticas en JavaScript",
-        content: `JavaScript permite realizar operaciones matemáticas:<ul><li>Suma: <code>5 + 3</code></li><li>Resta: <code>10 - 4</code></li><li>Multiplicación: <code>4 * 5</code></li><li>División: <code>20 / 4</code></li><li>Raíz cuadrada: <code>Math.sqrt(25)</code></li></ul>`
-      },
-      variables: {
-        title: "Variables en JavaScript",
-        content: `En JavaScript, se usan <code>let</code> o <code>const</code> para declarar variables.<ul><li>Número: <code>let edad = 25;</code></li><li>Texto: <code>let nombre = "Ana";</code></li><li>Constante: <code>const PI = 3.14;</code></li></ul>`
-      },
-      text: {
-        title: "Manipulación de Texto en JavaScript",
-        content: `JavaScript ofrece métodos para trabajar con cadenas de texto (strings).<ul><li>Concatenación: <code>"Hola" + " Mundo"</code></li><li>Longitud: <code>"Hola".length</code></li><li>Mayúsculas: <code>"hola".toUpperCase()</code></li></ul>`
+      // NIVEL PROGRAMADOR: Contenido para el Nivel 1
+      1: {
+        intro: {
+          title: "Nivel Programador: Estructuras de Control",
+          content: "¡Bienvenido al nivel Programador! Ahora que ya conoces los fundamentos, es hora de aprender a controlar el flujo de tus programas. Aprenderás sobre condicionales múltiples para tomar decisiones complejas, bucles para repetir tareas de forma eficiente y funciones para organizar y reutilizar tu código."
+        },
+        conditionals: {
+          title: "Condicionales Múltiples (if-else if-else)",
+          content: `<p>Para tomar decisiones en tu código, usamos condicionales. Cuando tienes múltiples posibilidades, la estructura <code>if-else if-else</code> es perfecta.</p>
+          <h4>1. La primera condición: <code>if</code></h4>
+          <p>El programa evalúa la condición del <code>if</code>. Si es verdadera, ejecuta su bloque de código y ignora el resto.</p>
+          <pre><code>let nota = 85;
+if (nota >= 90) {
+  console.log("Sobresaliente");
+}</code></pre>
+          <h4>2. Otras posibilidades: <code>else if</code></h4>
+          <p>Si la condición del <code>if</code> es falsa, el programa pasa a evaluar la del <code>else if</code>. Puedes tener tantos <code>else if</code> como necesites.</p>
+          <pre><code>let nota = 85;
+if (nota >= 90) {
+  console.log("Sobresaliente");
+} else if (nota >= 70) {
+  console.log("Aprobado");
+}</code></pre>
+          <h4>3. El caso por defecto: <code>else</code></h4>
+          <p>Si ninguna de las condiciones anteriores fue verdadera, se ejecuta el bloque del <code>else</code>.</p>
+          <pre><code>let nota = 85;
+if (nota >= 90) {
+  console.log("Sobresaliente");
+} else if (nota >= 70) {
+  console.log("Aprobado");
+} else {
+  console.log("Reprobado");
+}</code></pre>
+          <p><b>En resumen:</b> El programa evalúa las condiciones en orden y ejecuta <b>solo el primer bloque</b> cuya condición sea verdadera.</p>`
+        },
+        loops: {
+          title: "Bucles (for y while)",
+          content: `<p>Los bucles te permiten ejecutar un bloque de código repetidamente, lo que es fundamental para automatizar tareas.</p>
+          <h4>1. Bucle <code>for</code>: Ideal para cuando sabes cuántas veces repetir</h4>
+          <p>El bucle <code>for</code> tiene tres partes: <b>inicialización</b> (se ejecuta una vez), <b>condición</b> (se evalúa antes de cada iteración) y <b>expresión de actualización</b> (se ejecuta al final de cada iteración).</p>
+          <pre><code>// Este bucle se ejecutará 5 veces (para i = 0, 1, 2, 3, 4)
+for (let i = 0; i < 5; i++) {
+  console.log("Iteración número: " + i);
+}</code></pre>
+          <h4>2. Bucle <code>while</code>: Se repite mientras una condición sea verdadera</h4>
+          <p>El bucle <code>while</code> es más simple. Solo tiene una condición. Mientras esa condición sea verdadera, el bucle seguirá ejecutándose. ¡Cuidado con no crear un bucle infinito!</p>
+          <pre><code>let contador = 0;
+while (contador < 5) {
+  console.log("El contador es: " + contador);
+  contador++; // Importante: incrementa el contador para que el bucle termine algún día
+}</code></pre>`
+        },
+        functions: {
+          title: "Funciones: Reutilizando Código",
+          content: `<p>Las funciones son bloques de código reutilizables que realizan una tarea específica. Son la base de la programación modular.</p>
+          <h4>1. Definir una función</h4>
+          <p>Usa la palabra clave <code>function</code> seguida de un nombre, paréntesis <code>()</code> (que pueden contener parámetros) y llaves <code>{}</code> para el cuerpo de la función.</p>
+          <pre><code>// Función 'saludar' que acepta un parámetro llamado 'nombre'
+function saludar(nombre) {
+  // La palabra clave 'return' devuelve un valor
+  return "Hola, " + nombre + "!";
+}</code></pre>
+          <h4>2. Llamar (invocar) a una función</h4>
+          <p>Para usar una función, simplemente escribes su nombre seguido de paréntesis y le pasas los argumentos que necesita.</p>
+          <pre><code>// Llamamos a la función 'saludar' y le pasamos "Ana" como argumento
+let mensaje = saludar("Ana");
+console.log(mensaje); // Imprime "Hola, Ana!" en la consola</code></pre>
+          <p><b>Beneficios:</b> Reutilización de código, organización y facilidad de depuración.</p>`
+        }
       }
     },
     python: {
-      intro: {
-        title: "¿Qué es la Programación?",
-        content: "La programación es el proceso de crear instrucciones que una computadora puede seguir para realizar tareas específicas. Es como escribir una receta detallada que la computadora ejecuta paso a paso."
+      // Contenido para el Nivel 0: APRENDIZ
+      0: {
+        intro: {
+          title: "¿Qué es la Programación?",
+          content: "La programación es el proceso de crear instrucciones que una computadora puede seguir para realizar tareas específicas. Es como escribir una receta detallada que la computadora ejecuta paso a paso."
+        },
+        helloworld: {
+          title: "Hola Mundo en Python",
+          content: `El programa 'Hola Mundo' es tradicionalmente el primer programa. En Python, para mostrar un mensaje en la pantalla, se usa la función <code>print()</code>.<pre><code>print("Hola Mundo")</code></pre>`
+        },
+        operations: {
+          title: "Operaciones Aritméticas en Python",
+          content: `Python permite realizar operaciones matemáticas de forma muy intuitiva:<ul><li>Suma: <code>5 + 3</code></li><li>Resta: <code>10 - 4</code></li><li>Multiplicación: <code>4 * 5</code></li><li>División: <code>20 / 4</code></li><li>Raíz cuadrada: <code>25 ** 0.5</code></li></ul>`
+        },
+        variables: {
+          title: "Variables en Python",
+          content: `En Python, no necesitas palabras clave para declarar variables. Simplemente les asignas un nombre y un valor.<ul><li>Número: <code>edad = 25</code></li><li>Texto: <code>nombre = "Ana"</code></li><li>Constante (por convención): <code>PI = 3.14</code></li></ul>`
+        },
+        text: {
+          title: "Manipulación de Texto en Python",
+          content: `Python ofrece funciones y métodos para trabajar con cadenas de texto (strings).<ul><li>Concatenación: <code>"Hola" + " Mundo"</code></li><li>Longitud: <code>len("Hola")</code></li><li>Mayúsculas: <code>"hola".upper()</code></li></ul>`
+        }
       },
-      helloworld: {
-        title: "Hola Mundo en Python",
-        content: `El programa 'Hola Mundo' es tradicionalmente el primer programa. En Python, para mostrar un mensaje en la pantalla, se usa la función <code>print()</code>.<pre><code>print("Hola Mundo")</code></pre>`
-      },
-      operations: {
-        title: "Operaciones Aritméticas en Python",
-        content: `Python permite realizar operaciones matemáticas de forma muy intuitiva:<ul><li>Suma: <code>5 + 3</code></li><li>Resta: <code>10 - 4</code></li><li>Multiplicación: <code>4 * 5</code></li><li>División: <code>20 / 4</code></li><li>Raíz cuadrada: <code>25 ** 0.5</code></li></ul>`
-      },
-      variables: {
-        title: "Variables en Python",
-        content: `En Python, no necesitas palabras clave para declarar variables. Simplemente les asignas un nombre y un valor.<ul><li>Número: <code>edad = 25</code></li><li>Texto: <code>nombre = "Ana"</code></li><li>Constante (por convención): <code>PI = 3.14</code></li></ul>`
-      },
-      text: {
-        title: "Manipulación de Texto en Python",
-        content: `Python ofrece funciones y métodos para trabajar con cadenas de texto (strings).<ul><li>Concatenación: <code>"Hola" + " Mundo"</code></li><li>Longitud: <code>len("Hola")</code></li><li>Mayúsculas: <code>"hola".upper()</code></li></ul>`
+      // NIVEL PROGRAMADOR: Contenido para el Nivel 1
+      1: {
+        intro: {
+          title: "Nivel Programador: Estructuras de Control",
+          content: "¡Bienvenido al nivel Programador! Ahora que ya conoces los fundamentos, es hora de aprender a controlar el flujo de tus programas. Aprenderás sobre condicionales múltiples para tomar decisiones complejas, bucles para repetir tareas de forma eficiente y funciones para organizar y reutilizar tu código."
+        },
+        conditionals: {
+          title: "Condicionales Múltiples (if-elif-else)",
+          content: `<p>Para tomar decisiones en tu código, usamos condicionales. Cuando tienes múltiples posibilidades, la estructura <code>if-elif-else</code> es perfecta.</p>
+          <h4>1. La primera condición: <code>if</code></h4>
+          <p>El programa evalúa la condición del <code>if</code>. Si es verdadera, ejecuta su bloque de código y ignora el resto.</p>
+          <pre><code>nota = 85
+if nota >= 90:
+  print("Sobresaliente")</code></pre>
+          <h4>2. Otras posibilidades: <code>elif</code></h4>
+          <p>Si la condición del <code>if</code> es falsa, el programa pasa a evaluar la del <code>elif</code> (abreviatura de "else if"). Puedes tener tantos <code>elif</code> como necesites.</p>
+          <pre><code>nota = 85
+if nota >= 90:
+  print("Sobresaliente")
+elif nota >= 70:
+  print("Aprobado")</code></pre>
+          <h4>3. El caso por defecto: <code>else</code></h4>
+          <p>Si ninguna de las condiciones anteriores fue verdadera, se ejecuta el bloque del <code>else</code>.</p>
+          <pre><code>nota = 85
+if nota >= 90:
+  print("Sobresaliente")
+elif nota >= 70:
+  print("Aprobado")
+else:
+  print("Reprobado")</code></pre>
+          <p><b>En resumen:</b> El programa evalúa las condiciones en orden y ejecuta <b>solo el primer bloque</b> cuya condición sea verdadera.</p>`
+        },
+        loops: {
+          title: "Bucles (for y while)",
+          content: `<p>Los bucles te permiten ejecutar un bloque de código repetidamente, lo que es fundamental para automatizar tareas.</p>
+          <h4>1. Bucle <code>for</code>: Ideal para iterar sobre secuencias</h4>
+          <p>En Python, el bucle <code>for</code> se usa comúnmente para iterar sobre una secuencia (como una lista, una tupla o un rango de números).</p>
+          <pre><code># Este bucle se ejecutará 5 veces (para i = 0, 1, 2, 3, 4)
+for i in range(5):
+  print(f"Iteración número: {i}")</code></pre>
+          <h4>2. Bucle <code>while</code>: Se repite mientras una condición sea verdadera</h4>
+          <p>El bucle <code>while</code> es más simple. Solo tiene una condición. Mientras esa condición sea verdadera, el bucle seguirá ejecutándose. ¡Cuidado con no crear un bucle infinito!</p>
+          <pre><code>contador = 0
+while contador < 5:
+  print(f"El contador es: {contador}")
+  contador += 1 # Importante: incrementa el contador para que el bucle termine algún día</code></pre>`
+        },
+        functions: {
+          title: "Funciones: Reutilizando Código",
+          content: `<p>Las funciones son bloques de código reutilizables que realizan una tarea específica. Son la base de la programación modular.</p>
+          <h4>1. Definir una función</h4>
+          <p>Usa la palabra clave <code>def</code> seguida de un nombre, paréntesis <code>()</code> (que pueden contener parámetros) y dos puntos <code>:</code>. El cuerpo de la función va indentado.</p>
+          <pre><code># Función 'saludar' que acepta un parámetro llamado 'nombre'
+def saludar(nombre):
+  # La palabra clave 'return' devuelve un valor
+  return f"Hola, {nombre}!"</code></pre>
+          <h4>2. Llamar (invocar) a una función</h4>
+          <p>Para usar una función, simplemente escribes su nombre seguido de paréntesis y le pasas los argumentos que necesita.</p>
+          <pre><code># Llamamos a la función 'saludar' y le pasamos "Ana" como argumento
+mensaje = saludar("Ana")
+print(mensaje)  # Imprime "Hola, Ana!" en la consola</code></pre>
+          <p><b>Beneficios:</b> Reutilización de código, organización y facilidad de depuración.</p>`
+        }
       }
     }
   };
 
+  // NIVEL APRENDIZ Y PROGRAMADOR: Preguntas por lenguaje y nivel
   const questionsByLanguage: Record<string, Record<number, { type: string; question: string; codeSnippet: string; correctCompletion: string; explanation: string }[]>> = {
     javascript: {
+      // Preguntas para el Nivel 0: APRENDIZ
       0: [
         { type: "code", question: "Completa el código para mostrar un mensaje en la consola:", codeSnippet: 'console.___("Hola Mundo");', correctCompletion: 'log', explanation: "En JavaScript, console.log() se utiliza para mostrar mensajes en la consola del navegador." },
         { type: "code", question: "Completa el código para crear una variable llamada 'edad' con valor 30:", codeSnippet: '___ edad = 30;', correctCompletion: 'let', explanation: "En JavaScript, se usa 'let' para declarar variables que pueden cambiar su valor." },
@@ -139,42 +282,27 @@ export default function Games() {
         { type: "code", question: "Completa el código para hacer un bucle for:", codeSnippet: '___ (let i = 0; i < 5; i++) { console.log(i); }', correctCompletion: 'for', explanation: "La palabra clave 'for' se usa para crear bucles que se repiten un número determinado de veces." },
         { type: "code", question: "Completa el código para retornar un valor de una función:", codeSnippet: 'function duplicar(x) { ___ x * 2; }', correctCompletion: 'return', explanation: "La palabra clave 'return' se usa para devolver un valor desde una función." }
       ],
+      // NIVEL PROGRAMADOR: Preguntas para el Nivel 1
       1: [
-        { type: "code", question: "Completa el código para un bucle while:", codeSnippet: '___ (contador < 10) { contador++; }', correctCompletion: 'while', explanation: "El bucle 'while' se ejecuta mientras la condición sea verdadera." },
-        { type: "code", question: "Completa el código para un condicional if-else:", codeSnippet: 'if (edad >= 18) { console.log("Mayor"); } ___ { console.log("Menor"); }', correctCompletion: 'else', explanation: "'else' se ejecuta cuando la condición del 'if' es falsa." },
-        { type: "code", question: "Completa el código para un condicional else if:", codeSnippet: 'if (nota >= 90) { console.log("A"); } ___ if (nota >= 80) { console.log("B"); }', correctCompletion: 'else', explanation: "'else if' permite verificar múltiples condiciones en secuencia." },
-        { type: "code", question: "Completa el código para crear una función con parámetros:", codeSnippet: 'function sumar(a, ___) { return a + b; }', correctCompletion: 'b', explanation: "Las funciones pueden recibir múltiples parámetros separados por comas." },
-        { type: "code", question: "Completa el código para agregar un elemento a un array:", codeSnippet: 'numeros.___(5);', correctCompletion: 'push', explanation: "El método push() agrega un elemento al final del array." },
-        { type: "code", question: "Completa el código para eliminar el último elemento de un array:", codeSnippet: 'let ultimo = numeros.___();', correctCompletion: 'pop', explanation: "El método pop() elimina y devuelve el último elemento del array." },
-        { type: "code", question: "Completa el código para unir todos los elementos de un array:", codeSnippet: 'let texto = palabras.___(" ");', correctCompletion: 'join', explanation: "El método join() une todos los elementos del array en un string." },
-        { type: "code", question: "Completa el código para crear un objeto:", codeSnippet: 'let persona = { nombre: "Juan", ___: 30 };', correctCompletion: 'edad', explanation: "Los objetos en JavaScript tienen propiedades con pares clave-valor." },
-        { type: "code", question: "Completa el código para acceder a una propiedad de un objeto:", codeSnippet: 'let nombre = persona.___;', correctCompletion: 'nombre', explanation: "Se puede acceder a las propiedades de un objeto usando notación de punto." },
-        { type: "code", question: "Completa el código para manejar errores:", codeSnippet: '___ { códigoRiesgoso(); } ___ (error) { console.log(error); }', correctCompletion: 'try catch', explanation: "try-catch permite manejar errores sin que el programa se detenga." },
-        { type: "code", question: "Completa el código para convertir string a número:", codeSnippet: 'let numero = ___("123");', correctCompletion: 'parseInt', explanation: "parseInt() convierte una cadena de texto a un número entero." },
-        { type: "code", question: "Completa el código para verificar si un array incluye un elemento:", codeSnippet: 'let existe = numeros.___(5);', correctCompletion: 'includes', explanation: "El método includes() verifica si un elemento existe en el array." },
-        { type: "code", question: "Completa el código para obtener el valor absoluto:", codeSnippet: 'let absoluto = Math.___(-5);', correctCompletion: 'abs', explanation: "Math.abs() devuelve el valor absoluto de un número." },
-        { type: "code", question: "Completa el código para generar un número aleatorio:", codeSnippet: 'let aleatorio = Math.___();', correctCompletion: 'random', explanation: "Math.random() genera un número aleatorio entre 0 y 1." },
-        { type: "code", question: "Completa el código para redondear un número:", codeSnippet: 'let redondeado = Math.___(3.7);', correctCompletion: 'round', explanation: "Math.round() redondea un número al entero más cercano." }
-      ],
-      2: [
-        { type: "code", question: "Completa el código para una función flecha:", codeSnippet: 'const sumar = (a, b) ___ a + b;', correctCompletion: '=>', explanation: "Las funciones flecha usan '=>' para definir el cuerpo de la función." },
-        { type: "code", question: "Completa el código para filtrar un array:", codeSnippet: 'let pares = numeros.___(n => n % 2 === 0);', correctCompletion: 'filter', explanation: "El método filter() crea un nuevo array con elementos que cumplen una condición." },
-        { type: "code", question: "Completa el código para mapear un array:", codeSnippet: 'let cuadrados = numeros.___(n => n * n);', correctCompletion: 'map', explanation: "El método map() crea un nuevo array aplicando una función a cada elemento." },
-        { type: "code", question: "Completa el código para reducir un array:", codeSnippet: 'let suma = numeros.___((acc, n) => acc + n, 0);', correctCompletion: 'reduce', explanation: "El método reduce() aplica una función para reducir el array a un solo valor." },
-        { type: "code", question: "Completa el código para una promesa:", codeSnippet: 'new ___((resolve, reject) => { resolve("Éxito"); });', correctCompletion: 'Promise', explanation: "Las Promesas manejan operaciones asíncronas en JavaScript." },
-        { type: "code", question: "Completa el código para usar async/await:", codeSnippet: 'async function fetchData() { let data = await fetch(url); ___ data.json(); }', correctCompletion: 'return', explanation: "async/await simplifica el trabajo con operaciones asíncronas." },
-        { type: "code", question: "Completa el código para una clase:", codeSnippet: '___ Persona { constructor(nombre) { this.nombre = nombre; } }', correctCompletion: 'class', explanation: "Las clases en JavaScript permiten crear objetos con propiedades y métodos." },
-        { type: "code", question: "Completa el código para herencia de clases:", codeSnippet: 'class Estudiante ___ Persona { constructor(nombre, grado) { super(nombre); } }', correctCompletion: 'extends', explanation: "La palabra clave 'extends' permite que una clase herede de otra." },
-        { type: "code", question: "Completa el código para una expresión regular:", codeSnippet: 'let regex = /___/; // para encontrar números', correctCompletion: '\\d', explanation: "\\d en expresiones regulares representa cualquier dígito." },
-        { type: "code", question: "Completa el código para usar destructuring de objetos:", codeSnippet: 'let { nombre, ___ } = persona;', correctCompletion: 'edad', explanation: "El destructuring permite extraer propiedades de objetos en variables." },
-        { type: "code", question: "Completa el código para el operador spread:", codeSnippet: 'let newArray = [...___, 4, 5];', correctCompletion: 'array', explanation: "El operador spread (...) expande un array en elementos individuales." },
-        { type: "code", question: "Completa el código para una función recursiva:", codeSnippet: 'function factorial(n) { if (n <= 1) ___ 1; return n * factorial(n - 1); }', correctCompletion: 'return', explanation: "Una función recursiva se llama a sí misma hasta cumplir una condición base." },
-        { type: "code", question: "Completa el código para un closure:", codeSnippet: 'function crearContador() { let count = 0; return function() { ___ count++; }; }', correctCompletion: 'return', explanation: "Un closure permite a una función acceder a variables de su ámbito exterior." },
-        { type: "code", question: "Completa el código para el operador ternario:", codeSnippet: 'let resultado = (edad >= 18) ? "Mayor" : ___;', correctCompletion: '"Menor"', explanation: "El operador ternario es una forma concisa de escribir un if-else." },
-        { type: "code", question: "Completa el código para verificar si una variable es null:", codeSnippet: 'if (variable ___ null) { console.log("Es null"); }', correctCompletion: '===', explanation: "Se usa el operador de igualdad estricta para verificar si una variable es null." }
+        { type: "code", question: "Completa el código para un condicional 'else if':", codeSnippet: 'if (edad < 18) { console.log("Menor"); } ___ (edad < 65) { console.log("Adulto"); }', correctCompletion: 'else if', explanation: "'else if' se usa para verificar otra condición si la anterior 'if' fue falsa." },
+        { type: "code", question: "Completa el bucle 'for' para que se ejecute 5 veces:", codeSnippet: 'for (let i = 0; i ___ 5; i++) { console.log(i); }', correctCompletion: '<', explanation: "La parte central del bucle 'for' es la condición que se evalúa antes de cada iteración." },
+        { type: "code", question: "Completa el bucle 'while' para que se detenga cuando 'count' llegue a 10:", codeSnippet: 'let count = 0; while (count ___ 10) { console.log(count); count++; }', correctCompletion: '<', explanation: "El bucle 'while' continúa mientras la condición especificada sea verdadera." },
+        { type: "code", question: "Completa la definición de la función 'sumar':", codeSnippet: 'function sumar(a, ___) { return a + b; }', correctCompletion: 'b', explanation: "Las funciones pueden aceptar múltiples parámetros separados por comas." },
+        { type: "code", question: "Completa la llamada a la función 'saludar':", codeSnippet: 'function saludar(nombre) { return "Hola, " + nombre; } let mensaje = ___("Mundo");', correctCompletion: 'saludar', explanation: "Para llamar a una función, simplemente escribes su nombre seguido de paréntesis con los argumentos." },
+        { type: "code", question: "Completa el código para agregar un elemento al final de un array:", codeSnippet: 'let colores = ["rojo", "verde"]; colores.___("azul");', correctCompletion: 'push', explanation: "El método 'push()' agrega uno o más elementos al final de un array." },
+        { type: "code", question: "Completa el bucle 'for' para iterar sobre un array:", codeSnippet: 'let frutas = ["manzana", "pera"]; for (let i = 0; i < frutas.___; i++) { console.log(frutas[i]); }', correctCompletion: 'length', explanation: "La propiedad 'length' de un array devuelve el número de elementos que contiene." },
+        { type: "code", question: "Completa el condicional para verificar si un número es par o impar:", codeSnippet: 'if (numero % 2 ___ 0) { console.log("Par"); } else { console.log("Impar"); }', correctCompletion: '==', explanation: "El operador de módulo (%) devuelve el resto de una división. Si el resto es 0, el número es par." },
+        { type: "code", question: "Completa el bucle 'for...of' para iterar sobre los elementos de un array:", codeSnippet: 'let numeros = [1, 2, 3]; for (let num ___ numeros) { console.log(num); }', correctCompletion: 'of', explanation: "El bucle 'for...of' proporciona una forma sencilla de iterar sobre los elementos de un objeto iterable (como un array)." },
+        { type: "code", question: "Completa la función para que retorne el cuadrado de un número:", codeSnippet: 'function cuadrado(x) { ___ x * x; }', correctCompletion: 'return', explanation: "'return' se usa dentro de una función para especificar el valor que la función debe devolver." },
+        { type: "code", question: "Completa el código para verificar si una variable es de tipo string:", codeSnippet: 'let texto = "Hola"; if (typeof texto ___ "string") { console.log("Es un texto"); }', correctCompletion: '===', explanation: "'typeof' devuelve el tipo de una variable, y '===' comprueba si es igual al valor esperado." },
+        { type: "code", question: "Completa el bucle 'do...while' para que se ejecute al menos una vez:", codeSnippet: 'let i = 0; ___ { console.log(i); i++; } while (i < 5);', correctCompletion: 'do', explanation: "El bucle 'do...while' siempre se ejecuta al menos una vez antes de verificar la condición." },
+        { type: "code", question: "Completa la función para calcular el área de un rectángulo:", codeSnippet: 'function areaRectangulo(base, altura) { let area = base * altura; ___ area; }', correctCompletion: 'return', explanation: "La función calcula el área y luego usa 'return' para devolver ese valor." },
+        { type: "code", question: "Completa el código para encontrar el número mayor entre dos:", codeSnippet: 'function mayor(a, b) { if (a > b) { ___ a; } else { return b; } }', correctCompletion: 'return', explanation: "La función compara 'a' y 'b' y devuelve el mayor de los dos usando 'return'." },
+        { type: "code", question: "Completa el bucle 'for' para contar hacia atrás desde 10 hasta 1:", codeSnippet: 'for (let i = 10; i ___ 1; i--) { console.log(i); }', correctCompletion: '>=', explanation: "El bucle comienza en 10 y continúa mientras 'i' sea mayor o igual a 1, decrementando 'i' en cada iteración." }
       ]
     },
     python: {
+      // Preguntas para el Nivel 0: APRENDIZ
       0: [
         { type: "code", question: "Completa el código para mostrar un mensaje en pantalla:", codeSnippet: '___("Hola Mundo")', correctCompletion: 'print', explanation: "En Python, la función print() se utiliza para mostrar texto en la consola." },
         { type: "code", question: "Completa el código para crear una variable llamada 'edad' con valor 30:", codeSnippet: '___ = 30', correctCompletion: 'edad', explanation: "En Python, se crea una variable simplemente asignándole un nombre y un valor." },
@@ -192,39 +320,23 @@ export default function Games() {
         { type: "code", question: "Completa el código para retornar un valor de una función:", codeSnippet: 'def duplicar(x): ___ x * 2', correctCompletion: 'return', explanation: "La palabra clave 'return' se usa para devolver un valor desde una función." },
         { type: "code", question: "Completa el código para convertir string a entero:", codeSnippet: 'numero = ___("123")', correctCompletion: 'int', explanation: "La función int() convierte una cadena de texto a un número entero." }
       ],
+      // NIVEL PROGRAMADOR: Preguntas para el Nivel 1
       1: [
-        { type: "code", question: "Completa el código para un bucle while:", codeSnippet: '___ contador < 10: contador += 1', correctCompletion: 'while', explanation: "El bucle 'while' se ejecuta mientras la condición sea verdadera." },
-        { type: "code", question: "Completa el código para un condicional if-else:", codeSnippet: 'if edad >= 18: print("Mayor") ___: print("Menor")', correctCompletion: 'else', explanation: "'else' se ejecuta cuando la condición del 'if' es falsa." },
-        { type: "code", question: "Completa el código para un condicional elif:", codeSnippet: 'if nota >= 90: print("A") ___ nota >= 80: print("B")', correctCompletion: 'elif', explanation: "'elif' permite verificar múltiples condiciones en secuencia." },
-        { type: "code", question: "Completa el código para una función con parámetros:", codeSnippet: 'def sumar(a, ___): return a + b', correctCompletion: 'b', explanation: "Las funciones pueden recibir múltiples parámetros separados por comas." },
-        { type: "code", question: "Completa el código para agregar un elemento a una lista:", codeSnippet: 'numeros.___(5)', correctCompletion: 'append', explanation: "El método append() agrega un elemento al final de la lista." },
-        { type: "code", question: "Completa el código para eliminar el último elemento de una lista:", codeSnippet: 'ultimo = numeros.___()', correctCompletion: 'pop', explanation: "El método pop() elimina y devuelve el último elemento de la lista." },
-        { type: "code", question: "Completa el código para unir elementos de una lista:", codeSnippet: 'texto = " ".___(palabras)', correctCompletion: 'join', explanation: "El método join() une todos los elementos de la lista en un string." },
-        { type: "code", question: "Completa el código para crear un diccionario:", codeSnippet: 'persona = {"nombre": "Juan", ___: 30}', correctCompletion: '"edad"', explanation: "Los diccionarios en Python tienen pares clave-valor." },
-        { type: "code", question: "Completa el código para acceder a un valor de un diccionario:", codeSnippet: 'nombre = persona["___"]', correctCompletion: 'nombre', explanation: "Se puede acceder a los valores de un diccionario usando su clave entre corchetes." },
-        { type: "code", question: "Completa el código para manejar excepciones:", codeSnippet: '___: código_riesgoso() ___ Exception as e: print(e)', correctCompletion: 'try except', explanation: "try-except permite manejar errores sin que el programa se detenga." },
-        { type: "code", question: "Completa el código para convertir string a flotante:", codeSnippet: 'numero = ___("3.14")', correctCompletion: 'float', explanation: "La función float() convierte una cadena de texto a un número decimal." },
-        { type: "code", question: "Completa el código para verificar si un elemento está en una lista:", codeSnippet: 'existe = 5 ___ numeros', correctCompletion: 'in', explanation: "El operador 'in' verifica si un elemento existe en la lista." },
-        { type: "code", question: "Completa el código para obtener el valor absoluto:", codeSnippet: 'absoluto = ___(-5)', correctCompletion: 'abs', explanation: "La función abs() devuelve el valor absoluto de un número." },
-        { type: "code", question: "Completa el código para generar un número aleatorio:", codeSnippet: 'import random; aleatorio = random.___()', correctCompletion: 'random', explanation: "random.random() genera un número aleatorio entre 0 y 1." },
-        { type: "code", question: "Completa el código para redondear un número:", codeSnippet: 'redondeado = ___(3.7)', correctCompletion: 'round', explanation: "La función round() redondea un número al entero más cercano." }
-      ],
-      2: [
-        { type: "code", question: "Completa el código para una función lambda:", codeSnippet: 'sumar = ___ a, b: a + b', correctCompletion: 'lambda', explanation: "Las funciones lambda son funciones anónimas definidas con la palabra clave lambda." },
-        { type: "code", question: "Completa el código para filtrar una lista:", codeSnippet: 'pares = list(___(lambda x: x % 2 == 0, numeros))', correctCompletion: 'filter', explanation: "La función filter() crea una lista con elementos que cumplen una condición." },
-        { type: "code", question: "Completa el código para mapear una lista:", codeSnippet: 'cuadrados = list(___(lambda x: x * x, numeros))', correctCompletion: 'map', explanation: "La función map() aplica una función a cada elemento de una lista." },
-        { type: "code", question: "Completa el código para reducir una lista:", codeSnippet: 'from functools import ___; suma = reduce(lambda a, b: a + b, numeros)', correctCompletion: 'reduce', explanation: "La función reduce() aplica una función para reducir la lista a un solo valor." },
-        { type: "code", question: "Completa el código para una lista por comprensión:", codeSnippet: 'cuadrados = [x*x ___ x in range(10)]', correctCompletion: 'for', explanation: "Las listas por comprensión permiten crear listas de forma concisa." },
-        { type: "code", question: "Completa el código para definir una clase:", codeSnippet: '___ Persona: def __init__(self, nombre): self.nombre = nombre', correctCompletion: 'class', explanation: "Las clases en Python permiten crear objetos con atributos y métodos." },
-        { type: "code", question: "Completa el código para herencia de clases:", codeSnippet: 'class Estudiante(___ Persona): def __init__(self, nombre, grado): super().__init__(nombre)', correctCompletion: 'object', explanation: "La herencia permite que una clase herede atributos y métodos de otra." },
-        { type: "code", question: "Completa el código para un decorador:", codeSnippet: '@___ def mi_funcion(): pass', correctCompletion: 'decorador', explanation: "Los decoradores modifican el comportamiento de funciones o métodos." },
-        { type: "code", question: "Completa el código para una expresión regular:", codeSnippet: 'import re; pattern = r"___" # para encontrar números', correctCompletion: '\\d', explanation: "\\d en expresiones regulares representa cualquier dígito." },
-        { type: "code", question: "Completa el código para desempaquetar una tupla:", codeSnippet: 'nombre, ___ = persona', correctCompletion: 'edad', explanation: "El desempaquetado permite asignar elementos de una tupla a variables." },
-        { type: "code", question: "Completa el código para el operador de expansión:", codeSnippet: 'new_list = [*___, 4, 5]', correctCompletion: 'old_list', explanation: "El operador * expande una lista en elementos individuales." },
-        { type: "code", question: "Completa el código para una función recursiva:", codeSnippet: 'def factorial(n): if n <= 1: ___ 1; return n * factorial(n-1)', correctCompletion: 'return', explanation: "Una función recursiva se llama a sí misma hasta cumplir una condición base." },
-        { type: "code", question: "Completa el código para un closure:", codeSnippet: 'def crear_contador(): count = 0; def incrementar(): nonlocal count; count += 1; ___ count', correctCompletion: 'return', explanation: "Un closure permite a una función acceder a variables de su ámbito exterior." },
-        { type: "code", question: "Completa el código para el operador ternario:", codeSnippet: 'resultado = "Mayor" ___ edad >= 18 else "Menor"', correctCompletion: 'if', explanation: "El operador ternario en Python usa la sintaxis 'valor if condicion else valor_falso'." },
-        { type: "code", question: "Completa el código para verificar si una variable es None:", codeSnippet: 'if variable ___ None: print("Es None")', correctCompletion: 'is', explanation: "Se usa el operador 'is' para verificar si una variable es None." }
+        { type: "code", question: "Completa el código para un condicional 'elif':", codeSnippet: 'if edad < 18: print("Menor") ___ edad < 65: print("Adulto")', correctCompletion: 'elif', explanation: "'elif' en Python es la abreviatura de 'else if' y se usa para verificar múltiples condiciones." },
+        { type: "code", question: "Completa el bucle 'for' para que se ejecute 5 veces:", codeSnippet: 'for i in range(5): print(i)', correctCompletion: 'range', explanation: "La función range(5) genera una secuencia de números del 0 al 4, que el bucle 'for' utiliza para iterar." },
+        { type: "code", question: "Completa el bucle 'while' para que se detenga cuando 'count' llegue a 10:", codeSnippet: 'count = 0 while count ___ 10: print(count) count += 1', correctCompletion: '<', explanation: "El bucle 'while' continúa mientras la condición especificada sea verdadera." },
+        { type: "code", question: "Completa la definición de la función 'sumar':", codeSnippet: 'def sumar(a, ___): return a + b', correctCompletion: 'b', explanation: "Las funciones pueden aceptar múltiples parámetros separados por comas." },
+        { type: "code", question: "Completa la llamada a la función 'saludar':", codeSnippet: 'def saludar(nombre): return f"Hola, {nombre}" mensaje = ___("Mundo")', correctCompletion: 'saludar', explanation: "Para llamar a una función, simplemente escribes su nombre seguido de paréntesis con los argumentos." },
+        { type: "code", question: "Completa el código para agregar un elemento al final de una lista:", codeSnippet: 'colores = ["rojo", "verde"] colores.___("azul")', correctCompletion: 'append', explanation: "El método 'append()' agrega un elemento al final de una lista." },
+        { type: "code", question: "Completa el bucle 'for' para iterar sobre una lista:", codeSnippet: 'frutas = ["manzana", "pera"] for fruta ___ frutas: print(fruta)', correctCompletion: 'in', explanation: "El bucle 'for' en Python usa la sintaxis 'for variable in iterable' para iterar sobre cada elemento." },
+        { type: "code", question: "Completa el condicional para verificar si un número es par o impar:", codeSnippet: 'if numero % 2 ___ 0: print("Par") else: print("Impar")', correctCompletion: '==', explanation: "El operador de módulo (%) devuelve el resto de una división. Si el resto es 0, el número es par." },
+        { type: "code", question: "Completa la función para que retorne el cuadrado de un número:", codeSnippet: 'def cuadrado(x): ___ x * x', correctCompletion: 'return', explanation: "'return' se usa dentro de una función para especificar el valor que la función debe devolver." },
+        { type: "code", question: "Completa el código para verificar si una variable es de tipo string:", codeSnippet: 'texto = "Hola" if isinstance(texto, ___): print("Es un texto")', correctCompletion: 'str', explanation: "La función isinstance() comprueba si un objeto es una instancia de una clase o tipo de datos determinado." },
+        { type: "code", question: "Completa el bucle 'while' para que se ejecute al menos una vez:", codeSnippet: '# Python no tiene do-while, pero se puede simular i = 0 while True: print(i) i += 1 if i ___ 5: break', correctCompletion: '>=', explanation: "Se simula un bucle 'do-while' usando 'while True' y una condición 'break' para salir." },
+        { type: "code", question: "Completa la función para calcular el área de un rectángulo:", codeSnippet: 'def area_rectangulo(base, altura): area = base * altura ___ area', correctCompletion: 'return', explanation: "La función calcula el área y luego usa 'return' para devolver ese valor." },
+        { type: "code", question: "Completa el código para encontrar el número mayor entre dos:", codeSnippet: 'def mayor(a, b): if a > b: ___ a else: return b', correctCompletion: 'return', explanation: "La función compara 'a' y 'b' y devuelve el mayor de los dos usando 'return'." },
+        { type: "code", question: "Completa el bucle 'for' para contar hacia atrás desde 10 hasta 1:", codeSnippet: 'for i in range(10, 0, ___): print(i)', correctCompletion: '-1', explanation: "La función range(start, stop, step) puede usar un paso negativo para contar hacia atrás." },
+        { type: "code", question: "Completa el código para verificar si una lista está vacía:", codeSnippet: 'mi_lista = [] if not mi_lista: print("La lista está ___")', correctCompletion: 'vacía', explanation: "En Python, una lista vacía se evalúa como False en un contexto booleano, por lo que 'if not mi_lista' es verdadero si la lista está vacía." }
       ]
     }
   };
@@ -245,12 +357,20 @@ export default function Games() {
     setShowFeedback(false); setSelectedAnswer(null); setIsCorrect(false); setCodeInput('');
   };
 
+  // NIVEL APRENDIZ Y PROGRAMADOR: Lógica para la navegación entre fases
   const nextPhase = () => {
-    if (gamePhase === 'intro') setGamePhase('helloworld');
-    else if (gamePhase === 'helloworld') setGamePhase('operations');
-    else if (gamePhase === 'operations') setGamePhase('variables');
-    else if (gamePhase === 'variables') setGamePhase('text');
-    else if (gamePhase === 'text') setGamePhase('questions');
+    if (selectedLevel === 0) { // Lógica para el Nivel 0: APRENDIZ
+      if (gamePhase === 'intro') setGamePhase('helloworld');
+      else if (gamePhase === 'helloworld') setGamePhase('operations');
+      else if (gamePhase === 'operations') setGamePhase('variables');
+      else if (gamePhase === 'variables') setGamePhase('text');
+      else if (gamePhase === 'text') setGamePhase('questions');
+    } else if (selectedLevel === 1) { // Lógica para el Nivel 1: PROGRAMADOR
+      if (gamePhase === 'intro') setGamePhase('conditionals');
+      else if (gamePhase === 'conditionals') setGamePhase('loops');
+      else if (gamePhase === 'loops') setGamePhase('functions');
+      else if (gamePhase === 'functions') setGamePhase('questions');
+    }
   };
 
   const handleAnswer = (answerIndex?: number) => {
@@ -266,7 +386,8 @@ export default function Games() {
       correct = codeInput === currentQ.correctCompletion;
     } else if (currentQ.type === 'multiple-choice') {
       userAnswer = answerIndex?.toString() || '';
-      correct = answerIndex === currentQ.correct;
+      // Corregido: verificar si existe la propiedad correct y si es un número
+      correct = answerIndex !== undefined && 'correct' in currentQ && answerIndex === currentQ.correct;
     }
 
     setSelectedAnswer(userAnswer);
@@ -331,7 +452,7 @@ export default function Games() {
   };
 
   // Obtenemos el contenido y las preguntas del lenguaje y nivel seleccionado
-  const fundamentalsContent = fundamentalsContentByLanguage[selectedLanguage]?.[gamePhase] || {};
+  const fundamentalsContent = fundamentalsContentByLanguage[selectedLanguage]?.[selectedLevel]?.[gamePhase] || {};
   const questions = questionsByLanguage[selectedLanguage]?.[selectedLevel] || [];
 
   // Calcular porcentaje actual basado en el total de 15 preguntas
@@ -397,32 +518,8 @@ export default function Games() {
         )}
 
         {/* El contenido de tu página */}
-        <div className={`relative z-10 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'} transition-all duration-1000`}>
-          {/* Encabezado animado */}
-          <header className="fixed top-0 left-0 w-full bg-white/10 backdrop-blur-lg border-b border-white/20 shadow-2xl z-30 animate-slide-down">
-            <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="relative group">
-                  <img src="/UNAL.webp" alt="Logo UNAL" width={50} height={50} className="hover:rotate-12 transition-all duration-300 drop-shadow-lg group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-blue-500/30 rounded-full animate-ping"></div>
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full opacity-0 group-hover:opacity-30 blur transition-all duration-300"></div>
-                </div>
-                <h1 className="text-2xl font-bold text-white drop-shadow-lg animate-glow">
-                  Minijuego VR/AR — Aprende a Programar
-                </h1>
-              </div>
-              <nav className="hidden md:flex items-center gap-6">
-                <a href="/" className="text-white/80 hover:text-white transition-all duration-300 hover:scale-110 relative group">
-                  Inicio
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="/games" className="text-white font-medium relative group">
-                  Juegos
-                  <span className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg opacity-20 blur group-hover:opacity-40 transition-all duration-300"></span>
-                </a>
-              </nav>
-            </div>
-          </header>
+        <div className={`relative z-10 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'} transition-all duration-1000 pt-24`}>
+
 
           {/* Contenido Principal */}
           <div className="max-w-7xl mx-auto pt-24 px-6 pb-12">
@@ -606,7 +703,7 @@ export default function Games() {
             )}
 
             {/* Vista del Juego - Fundamentos de Programación en VR/3D */}
-            {currentView === 'game' && selectedLevel === 0 && (
+            {currentView === 'game' && (
               <div className="relative" style={{ height: '100vh', width: '100vw', position: 'fixed', top: 0, left: 0 }}>
                 {/* Escena 3D mejorada con más elementos y animaciones */}
                 <a-scene vr-mode-ui="enabled: true" embedded style={{ height: '100%', width: '100%' }}>
@@ -675,7 +772,7 @@ export default function Games() {
                 {/* Overlay HUD (Interfaz del Juego) */}
                 <div className={`absolute inset-0 flex z-10 pointer-events-none ${gamePhase === 'results' ? 'items-start justify-center pt-10' : 'items-center justify-center'}`}>
                   {/* Fase de Introducción y Explicaciones */}
-                  {(gamePhase === 'intro' || gamePhase === 'helloworld' || gamePhase === 'operations' || gamePhase === 'variables' || gamePhase === 'text') && (
+                  {(gamePhase === 'intro' || gamePhase === 'helloworld' || gamePhase === 'operations' || gamePhase === 'variables' || gamePhase === 'text' || gamePhase === 'conditionals' || gamePhase === 'loops' || gamePhase === 'functions') && (
                     <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-10 max-w-4xl mx-auto pointer-events-auto animate-fade-in-up border border-white/20 relative overflow-hidden group">
                       {/* Efecto de brillo */}
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -707,7 +804,7 @@ export default function Games() {
                             className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl"
                           >
                             <span className="relative z-10 flex items-center gap-2">
-                              {gamePhase === 'text' ? 'Comenzar Juego' : 'Siguiente'}
+                              {gamePhase === 'functions' || gamePhase === 'text' ? 'Comenzar Juego' : 'Siguiente'}
                               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                               </svg>
@@ -909,7 +1006,14 @@ export default function Games() {
                   
                   {/* Fase de Resultados */}
                   {gamePhase === 'results' && (
-                    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-10 max-w-5xl mx-auto pointer-events-auto animate-fade-in-up results-container border border-white/20 relative overflow-hidden" style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                    <div 
+                      className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-10 max-w-5xl mx-auto pointer-events-auto animate-fade-in-up border border-white/20 relative overflow-hidden results-container" 
+                      style={{ 
+                        maxHeight: '85vh', 
+                        // Cambiado a 'scroll' para que la barra sea siempre visible
+                        overflowY: 'scroll' 
+                      }}
+                    >
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
                       <div className="relative z-10">
                         <h3 className="text-5xl font-bold text-white mb-8 text-center animate-bounce-slow">
@@ -983,49 +1087,6 @@ export default function Games() {
                       </div>
                     </div>
                   )}
-                </div>
-              </div>
-            )}
-            
-            {/* Vista del Juego para otros niveles (placeholder) */}
-            {currentView === 'game' && selectedLevel > 0 && (
-              <div className="min-h-[80vh] animate-fade-in-up">
-                <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-6 mb-6 border border-white/20">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-3xl font-bold text-white">
-                      {languages.find(l => l.id === selectedLanguage)?.name} - {levels[selectedLevel]?.name}
-                    </h2>
-                    <button 
-                      onClick={backToMenu}
-                      className="text-white/70 hover:text-white transition-all duration-300 hover:scale-110 group relative"
-                    >
-                      <span className="flex items-center gap-2">
-                        <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                        Volver al Menú
-                      </span>
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={{ height: '70vh' }}>
-                  <div className="flex items-center justify-center h-full bg-white/10 backdrop-blur-xl border border-white/20">
-                    <div className="text-center p-12">
-                      <h3 className="text-4xl font-bold text-white mb-6 animate-pulse">
-                        {levels[selectedLevel]?.name}
-                      </h3>
-                      <p className="text-xl text-white/90 mb-10">
-                        Este nivel está en desarrollo. Próximamente podrás disfrutar de una experiencia inmersiva de {levels[selectedLevel]?.description.toLowerCase()}.
-                      </p>
-                      <div className="flex justify-center">
-                        <div className="relative">
-                          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-400"></div>
-                          <div className="absolute inset-0 rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-400 animate-spin-reverse"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}
@@ -1236,8 +1297,15 @@ export default function Games() {
         }
 
         /* Estilos para la barra de desplazamiento en la pantalla de resultados */
+        .results-container {
+          /* Forzar una barra de desplazamiento visible para mejor UX */
+          scrollbar-width: thin; /* Para Firefox */
+          scrollbar-color: rgba(147, 51, 234, 0.5) rgba(255, 255, 255, 0.1); /* Para Firefox */
+        }
+
+        /* Estilos para navegadores WebKit (Chrome, Safari, Edge) */
         .results-container::-webkit-scrollbar {
-          width: 10px;
+          width: 12px;
         }
         .results-container::-webkit-scrollbar-track {
           background: rgba(255, 255, 255, 0.1);
@@ -1246,6 +1314,7 @@ export default function Games() {
         .results-container::-webkit-scrollbar-thumb {
           background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
           border-radius: 10px;
+          border: 2px solid rgba(255, 255, 255, 0.1); /* Añade un borde para que se destaque */
         }
         .results-container::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(to bottom, #2563eb, #7c3aed);

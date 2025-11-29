@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Página de inicio
     path('', views.index, name='index'),
+    path('register/', views.register, name='register'),
+    path('api/', include('authentication.urls')),
 ]

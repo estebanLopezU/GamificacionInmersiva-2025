@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-i%@bic3#^-4c$9vis(onllo4k=zwaovq59huq0&$9u(yz*%#67'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-i%@bic3#^-4c$9vis(onllo4k=zwaovq59huq0&$9u(yz*%#67')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,django').split(',')
 
 
 # Application definition
@@ -43,6 +47,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'authentication',  # Nueva app para autenticación
 ]
+
+# Add django_ratelimit only in production
+if not DEBUG:
+    INSTALLED_APPS.append('django_ratelimit')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,10 +91,10 @@ if os.environ.get('DB_HOST'):
     # Running in Docker with PostgreSQL
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'gamificacion_db',
-            'USER': 'gamificacion_user',
-            'PASSWORD': 'gamificacion_password',
+            'ENGINE': r'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_DB', 'gamificacion_db'),
+            'USER': os.environ.get('POSTGRES_USER', 'gamificacion_user'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'gamificacion_password'),
             'HOST': os.environ.get('DB_HOST'),
             'PORT': '5432',
         }
@@ -143,6 +151,61 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Cache configuration for django-ratelimit (only in production)
+if not DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': BASE_DIR / 'cache',
+        }
+    }
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'django.log',
+            'formatter': 'verbose',
+        },
+        'security_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'security.log',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['file'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django.security': {
+            'handlers': ['security_file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'authentication': {
+            'handlers': ['security_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
 # Configuración de CORS
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -151,8 +214,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3001",
 ]
 
-# Allow all origins for development
-CORS_ALLOW_ALL_ORIGINS = True
+# Allow all origins for development only
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -168,6 +232,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/minute',  # For anonymous users
+        'user': '100/hour'    # For authenticated users
+    }
 }
 
 
@@ -193,4 +265,16 @@ AUTHENTICATION_BACKENDS = [
 SESSION_COOKIE_DOMAIN = None  # Default
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = True  # Keep HTTPOnly for security
-SESSION_COOKIE_SECURE = False  # Allow HTTP for development
+SESSION_COOKIE_SECURE = not DEBUG  # HTTPS only in production
+
+# Security settings for production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True

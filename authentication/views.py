@@ -1,3 +1,4 @@
+import logging
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -7,6 +8,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import RegisterSerializer, UserSerializer
 from .models import CustomUser
+
+logger = logging.getLogger('authentication')
 
 @method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(views.APIView):
@@ -100,6 +103,7 @@ class LoginView(views.APIView):
                 })
             else:
                 print("Authentication failed - incorrect password")
+                logger.warning(f"Failed login attempt for email: {email} from IP: {request.META.get('REMOTE_ADDR')}")
                 return Response({'error': 'Incorrect password.'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
@@ -174,6 +178,7 @@ class AdminLoginView(views.APIView):
                 })
             else:
                 print("Admin authentication failed - incorrect password")
+                logger.warning(f"Failed admin login attempt for email: {email} from IP: {request.META.get('REMOTE_ADDR')}")
                 return Response({'error': 'Incorrect password.'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:

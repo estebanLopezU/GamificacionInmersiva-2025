@@ -12,6 +12,7 @@ Este proyecto implementa una plataforma de gamificación que permite crear exper
 - **👥 Gestión de Usuarios**: CRUD completo de usuarios con permisos jerárquicos
 - **🎨 Interfaz Moderna**: UI/UX atractiva con diseño responsivo
 - **🔐 Autenticación Segura**: JWT tokens con roles y permisos
+- **🛡️ Seguridad Avanzada**: Protección contra vulnerabilidades, rate limiting y logging
 - **📊 Panel de Administración**: Dashboard completo para gestión del sistema
 - **🎓 Soporte Multi-usuario**: Estudiantes y profesores con campos específicos
 - **📱 Responsive Design**: Funciona en desktop y dispositivos móviles
@@ -38,6 +39,46 @@ Este proyecto implementa una plataforma de gamificación que permite crear exper
 - **Control de Versiones**: Git
 - **Contenedor**: Docker & Docker Compose
 - **Entorno Virtual**: Python venv
+
+### Seguridad
+- **Rate Limiting**: `django-ratelimit` para protección contra ataques de fuerza bruta
+- **Variables de Entorno**: Configuración segura con `python-dotenv`
+- **Logging Avanzado**: Monitoreo de autenticación y eventos de seguridad
+- **HTTPS Production**: Configuración automática SSL en producción
+- **Validación de Emails**: Solo dominios @unal.edu.co permitidos
+
+## 🛡️ Características de Seguridad
+
+### 🔐 Autenticación y Autorización
+- **JWT Tokens**: Autenticación stateless con tokens de acceso y refresh
+- **Roles Jerárquicos**: Superadmin → Admin → User con permisos escalados
+- **Validación de Email**: Solo correos @unal.edu.co permitidos
+- **Rate Limiting**: Protección contra ataques de fuerza bruta (10 req/min anónimos, 100 req/hora autenticados)
+
+### 🛡️ Protección contra Vulnerabilidades
+- **Dependencias Actualizadas**: Django 5.2.8, DRF 3.15.2, JWT 5.5.1 (parches de seguridad)
+- **Configuración Segura**: Variables de entorno para secrets, DEBUG condicional
+- **Headers de Seguridad**: HSTS, Content-Type-Nosniff, XSS Filter en producción
+- **CORS Restringido**: Solo orígenes permitidos en producción
+
+### 📊 Monitoreo y Logging
+- **Logs de Seguridad**: Registro de intentos de login fallidos con IP
+- **Auditoría**: Logs separados para autenticación y eventos de seguridad
+- **Alertas**: Monitoreo de actividades sospechosas
+
+### 🔒 Configuración de Producción
+```python
+# Variables de entorno requeridas
+SECRET_KEY=tu_clave_secreta_segura
+DEBUG=False
+ALLOWED_HOSTS=tu-dominio.com,www.tu-dominio.com
+DB_HOST=tu-servidor-postgres
+```
+
+### 🚀 Despliegue Seguro
+- **HTTPS Obligatorio**: Redirección automática SSL en producción
+- **Cookies Seguras**: HttpOnly, Secure, SameSite configurados
+- **Cache Backend**: FileBased para desarrollo, Redis/Memcached recomendado para producción
 
 ## 🏗️ Arquitectura del Sistema
 

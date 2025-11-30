@@ -9,6 +9,7 @@ def validate_unal_email(value):
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
+        ('superadmin', 'Superadmin'),
         ('admin', 'Admin'),
         ('user', 'User'),
     )
@@ -32,6 +33,10 @@ class CustomUser(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []  # Email is the username field, so no additional required fields
+
+    @property
+    def is_superadmin(self):
+        return self.role == 'superadmin'
 
     def __str__(self):
         return self.email

@@ -2,7 +2,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'superadmin';
   user_type?: 'student' | 'professor';
   display_name?: string;
   academic_program?: string;
@@ -10,6 +10,7 @@ export interface User {
   semester?: number;
   job_title?: string;
   is_permanent?: boolean;
+  date_joined?: string;
 }
 
 export interface AuthTokens {
@@ -20,7 +21,7 @@ export interface AuthTokens {
 export interface LoginResponse {
   success: boolean;
   redirect_url: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'superadmin';
   tokens: AuthTokens;
 }
 

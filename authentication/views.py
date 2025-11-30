@@ -22,7 +22,7 @@ class RegisterView(views.APIView):
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
             # Return JSON with redirect URL
-            if user.role == 'admin':
+            if user.role in ['admin', 'superadmin']:
                 redirect_url = f"http://localhost:3000/admin?token={access_token}"
             else:
                 redirect_url = f"http://localhost:3000/page?token={access_token}"
@@ -83,7 +83,7 @@ class LoginView(views.APIView):
                     return Response({'error': 'Token generation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
                 # Return JSON with redirect URL
-                if user.role == 'admin':
+                if user.role in ['admin', 'superadmin']:
                     redirect_url = f"http://localhost:3000/admin?token={access_token}"
                 else:
                     redirect_url = f"http://localhost:3000/page?token={access_token}"
@@ -132,8 +132,8 @@ class AdminLoginView(views.APIView):
                 user_obj = CustomUser.objects.get(email=email)
                 print(f"Found user: {user_obj.email}, is_active: {user_obj.is_active}, role: {user_obj.role}")
 
-                # Check if user is admin
-                if user_obj.role != 'admin':
+                # Check if user is admin or superadmin
+                if user_obj.role not in ['admin', 'superadmin']:
                     print(f"User '{email}' is not an admin (role: {user_obj.role})")
                     return Response({'error': 'Access denied. Admin privileges required.'}, status=status.HTTP_403_FORBIDDEN)
 
@@ -227,9 +227,91 @@ class UserCountView(views.APIView):
         if not request.user.is_authenticated:
             return Response({'error': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        # Check if user is admin
-        if request.user.role == 'admin':
+        # Check if user is admin or superadmin
+        if request.user.role in ['admin', 'superadmin']:
             total_users = CustomUser.objects.count()
             return Response({'total_users': total_users})
         else:
             return Response({'error': 'Not Authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+class UserListView(views.APIView):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return Response({'error': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Check if user is admin or superadmin
+        if request.user.role not in ['admin', 'superadmin']:
+            return Response({'error': 'Not Authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        users = CustomUser.objects.all().order_by('-date_joined')
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+class UserDetailView(views.APIView):
+    def get(self, request, pk):
+        if not request.user.is_authenticated:
+            return Response({'error': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Check if user is admin or superadmin
+        if request.user.role not in ['admin', 'superadmin']:
+            return Response({'error': 'Not Authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            user = CustomUser.objects.get(pk=pk)
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk):
+        if not request.user.is_authenticated:
+            return Response({'error': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Check if user is admin or superadmin
+        if request.user.role not in ['admin', 'superadmin']:
+            return Response({'error': 'Not Authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            user = CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        if not request.user.is_authenticated:
+            return Response({'error': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Check if user is admin or superadmin
+        if request.user.role not in ['admin', 'superadmin']:
+            return Response({'error': 'Not Authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Prevent deletion of superadmin users
+        if request.user.role == 'superadmin' and CustomUser.objects.get(pk=pk).role == 'superadmin':
+            return Response({'error': 'Cannot delete superadmin users'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = CustomUser.objects.get(pk=pk)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+class UserCreateView(views.APIView):
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return Response({'error': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Check if user is admin or superadmin
+        if request.user.role not in ['admin', 'superadmin']:
+            return Response({'error': 'Not Authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

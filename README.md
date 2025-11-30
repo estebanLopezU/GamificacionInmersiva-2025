@@ -1,89 +1,346 @@
-# Documentación del Proyecto: Plataforma de Gamificación para Aprender a Programar
+# 🎮 Sistema de Gamificación Inmersiva - UNAL
 
-## 1. ¿Qué es este proyecto?
+Un sistema completo de gamificación educativa desarrollado para la Universidad Nacional de Colombia, que combina tecnologías modernas para crear experiencias de aprendizaje inmersivas.
 
-Este es un proyecto de aplicación web interactiva diseñada para enseñar a programar a través de la gamificación. La idea central es ofrecer una experiencia de aprendizaje similar a un juego, donde los usuarios pueden:
+## 📋 Descripción del Proyecto
 
-- Elegir un lenguaje de programación para aprender (como Python, JavaScript o Java).
-- Avanzar a través de diferentes niveles de dificultad, desde "Principiante" hasta "Junior Nivel 2".
-- Participar en minijuegos educativos, como cuestionarios interactivos (QuizGame) y rompecabezas de código (BlocksGame).
-- Seguir su progreso en cada lenguaje.
+Este proyecto implementa una plataforma de gamificación que permite crear experiencias de aprendizaje interactivas. El sistema cuenta con un panel de administración completo para gestionar usuarios, roles y contenido educativo, además de una interfaz de usuario intuitiva para estudiantes y profesores.
 
-La aplicación está diseñada como una SPA (Single-Page Application), lo que significa que la interfaz es fluida y rápida, cargando diferentes "pantallas" (bienvenida, selección de nivel, juego, etc.) sin necesidad de recargar la página por completo.
+### ✨ Características Principales
 
-## 2. Arquitectura y Tecnologías Utilizadas
+- **🎯 Sistema de Roles**: Superadmin, Admin y Usuario regular
+- **👥 Gestión de Usuarios**: CRUD completo de usuarios con permisos jerárquicos
+- **🎨 Interfaz Moderna**: UI/UX atractiva con diseño responsivo
+- **🔐 Autenticación Segura**: JWT tokens con roles y permisos
+- **📊 Panel de Administración**: Dashboard completo para gestión del sistema
+- **🎓 Soporte Multi-usuario**: Estudiantes y profesores con campos específicos
+- **📱 Responsive Design**: Funciona en desktop y dispositivos móviles
 
-Contrario a la configuración inicial que mencionaba Django, este proyecto no utiliza Django. Es una aplicación Full-Stack construida enteramente sobre el ecosistema de JavaScript/TypeScript, utilizando el framework Next.js tanto para el frontend como para el backend.
+## 🛠️ Tecnologías Utilizadas
 
-A continuación, se detalla cada componente tecnológico y su propósito:
+### Backend (Django)
+- **Framework**: Django 5.2.7
+- **Base de Datos**: SQLite3
+- **Autenticación**: Django REST Framework Simple JWT
+- **API**: Django REST Framework
+- **Validación**: Email validator para dominios @unal.edu.co
 
-### Framework Principal
+### Frontend (Next.js)
+- **Framework**: Next.js 14+
+- **Lenguaje**: TypeScript
+- **Styling**: Tailwind CSS
+- **Estado**: React Hooks
+- **Routing**: Next.js App Router
+- **API Client**: Fetch API nativo
 
-- **Next.js (v15):** Es el corazón de la aplicación. Se utiliza como un framework de React "full-stack".
-  - **Para el Frontend:** Renderiza la interfaz de usuario que ves en el navegador. Utiliza el App Router (evidenciado por la estructura de carpetas `src/app`), que permite una renderización optimizada y un enrutamiento basado en carpetas.
-  - **Para el Backend:** Next.js también ejecuta un servidor Node.js. Dentro de este, se pueden crear API Routes, que funcionan como un backend para manejar la lógica de negocio, la autenticación y la comunicación con la base de datos.
+### DevOps & Herramientas
+- **Gestión de Dependencias**: pip (Python), npm (Node.js)
+- **Control de Versiones**: Git
+- **Contenedor**: Docker & Docker Compose
+- **Entorno Virtual**: Python venv
 
-### Lenguaje de Programación
+## 🏗️ Arquitectura del Sistema
 
-- **TypeScript:** Todo el proyecto está escrito en TypeScript en lugar de JavaScript plano.
-  - **Propósito:** Añade un sistema de tipos estáticos al código. Esto ayuda a prevenir errores comunes durante el desarrollo, mejora la legibilidad y facilita el mantenimiento del código a largo plazo.
+```
+┌─────────────────┐    HTTP/REST    ┌─────────────────┐
+│   Next.js       │◄──────────────►│     Django      │
+│   Frontend      │   APIs JSON    │    Backend      │
+│                 │                │                 │
+│ - React/TS      │                │ - Python/Django │
+│ - Tailwind CSS  │                │ - DRF           │
+│ - JWT Auth      │                │ - SQLite        │
+└─────────────────┘                └─────────────────┘
+         │                                   │
+         ▼                                   ▼
+┌─────────────────┐                 ┌─────────────────┐
+│   Navegador     │                 │   Base de       │
+│   Web           │                 │   Datos         │
+│                 │                 │   SQLite3       │
+└─────────────────┘                 └─────────────────┘
+```
 
-### Base de Datos y ORM
+### Arquitectura Cliente-Servidor
+- **Frontend (React/Next.js)**: Maneja la interfaz de usuario y consume APIs
+- **Backend (Django)**: Procesa lógica de negocio y maneja base de datos
+- **Base de Datos**: SQLite para desarrollo, fácilmente migrable a PostgreSQL/MySQL
+- **Autenticación**: JWT tokens stateless entre frontend y backend
 
-- **Prisma (v6):** Es un ORM (Object-Relational Mapper) de nueva generación para Node.js y TypeScript.
-  - **Propósito:** Facilita enormemente la interacción con la base de datos. En lugar de escribir consultas SQL manualmente, defines un "esquema" de tus datos y Prisma te proporciona funciones de TypeScript para leer, escribir, actualizar y eliminar registros de forma segura y tipada. Los scripts en `package.json` (`db:push`, `db:generate`) son comandos de Prisma para gestionar la base de datos.
+## 📋 Requisitos Previos
 
-### Interfaz de Usuario y Componentes (Frontend)
+### Sistema Operativo
+- Windows 10/11
+- macOS 10.15+
+- Linux (Ubuntu 18.04+)
 
-- **React (v19):** Es la librería fundamental para construir la interfaz de usuario. Permite crear componentes reutilizables que gestionan su propio estado.
-- **shadcn/ui:** Es la biblioteca de componentes principal utilizada en el proyecto. No es una librería tradicional, sino una colección de componentes reutilizables construidos sobre Radix UI y Tailwind CSS.
-  - **Propósito:** Proporciona componentes de alta calidad y accesibles como `Button`, `Card`, `Progress`, `Badge`, etc., que puedes copiar en tu proyecto y personalizar. Esto acelera enormemente el desarrollo de la UI.
-- **Radix UI:** Es la base sobre la que se construyen los componentes de `shadcn/ui`.
-  - **Propósito:** Ofrece primitivas de componentes sin estilo, accesibles y de bajo nivel (como menús desplegables, diálogos, checkboxes) que se encargan de toda la lógica de comportamiento compleja.
-- **Lucide React:** Es la biblioteca de íconos utilizada.
-  - **Propósito:** Proporciona los íconos que ves en la aplicación, como `Code`, `Trophy`, `Play`, etc.
+### Software Requerido
+- **Python**: 3.8 o superior
+- **Node.js**: 18.0 o superior
+- **npm**: 8.0 o superior
+- **Git**: 2.0 o superior
+- **Docker**: (Opcional) 20.0 o superior
 
-### Estilos (Frontend)
+### Hardware Mínimo
+- **RAM**: 4GB
+- **Almacenamiento**: 2GB libres
+- **Procesador**: Dual-core 2.0GHz
 
-- **Tailwind CSS (v4):** Es un framework de CSS "utility-first".
-  - **Propósito:** En lugar de escribir archivos CSS tradicionales, aplicas clases directamente en tu HTML/JSX (ej. `className="text-white font-bold"`). Esto permite construir diseños complejos de manera muy rápida y mantener la consistencia visual. El archivo `globals.css` define la configuración base y las variables de color para Tailwind.
+## 🚀 Instalación y Configuración
 
-### Gestión de Estado (Frontend)
+### 1. Clonar el Repositorio
+```bash
+git clone https://github.com/estebanLopezU/GamificacionInmersiva-2025.git
+cd GamificacionInmersiva-2025
+```
 
-- **React Hooks (`useState`, `useEffect`):** Se utilizan para gestionar el estado local dentro de los componentes (por ejemplo, para saber qué pantalla mostrar con `currentScreen`).
-- **Zustand:** Es una biblioteca de gestión de estado global, pequeña y rápida.
-  - **Propósito:** Mientras `useState` es para el estado de un solo componente, Zustand se usaría para gestionar un estado que necesita ser compartido entre componentes que no están directamente relacionados, como la información del usuario autenticado o el progreso general del juego.
+### 2. Configurar Backend (Django)
+
+#### Opción A: Configuración Manual
+```bash
+# Crear entorno virtual
+python -m venv venv
+
+# Activar entorno virtual
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar migraciones de base de datos
+python manage.py makemigrations
+python manage.py migrate
+
+# Crear superadmin (opcional - ya existe uno preconfigurado)
+python manage.py shell -c "
+from authentication.models import CustomUser
+user = CustomUser.objects.create_user('admin@unal.edu.co', email='admin@unal.edu.co', password='admin123')
+user.role='admin'
+user.save()
+"
+```
+
+#### Opción B: Usando Docker
+```bash
+# Construir y ejecutar con Docker Compose
+docker-compose up --build
+```
+
+### 3. Configurar Frontend (Next.js)
+```bash
+# Navegar al directorio del frontend
+cd gamified-learning-app
+
+# Instalar dependencias
+npm install
+
+# Configurar variables de entorno (opcional)
+# Crear archivo .env.local
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
+```
+
+### 4. Ejecutar el Proyecto
+
+#### Backend (Django)
+```bash
+# Desde el directorio raíz del proyecto
+python manage.py runserver
+# Servidor disponible en: http://localhost:8000
+```
+
+#### Frontend (Next.js)
+```bash
+# Desde gamified-learning-app/
+npm run dev
+# Servidor disponible en: http://localhost:3000
+```
+
+## 🎯 Cómo Usar el Sistema
+
+### Acceso al Sistema
+
+#### Superadmin (Usuario Principal)
+- **Email**: `elopezu@unal.edu.co`
+- **Contraseña**: `BZTfne48`
+- **Rol**: Superadmin (control total del sistema)
+
+#### Acceso a Paneles
+1. **Panel de Administración**: `http://localhost:3000/admin`
+2. **Login Administrativo**: `http://localhost:3000/admin-login`
+3. **Login Regular**: `http://localhost:3000/login`
+4. **Registro**: `http://localhost:3000/register`
+
+### Gestión de Usuarios
+- **Crear**: Botón "+" en la pestaña "Gestión de Usuarios"
+- **Editar**: Click en "Editar" en la tabla de usuarios
+- **Eliminar**: Click en "Eliminar" con confirmación
+- **Asignar Roles**: Solo superadmin puede asignar rol "superadmin"
+
+## 📁 Estructura del Proyecto
+
+```
+GamificacionInmersiva-2025/
+├── authentication/              # App Django de autenticación
+│   ├── models.py               # Modelos de usuario personalizados
+│   ├── views.py                # APIs REST
+│   ├── serializers.py          # Serializers DRF
+│   ├── urls.py                 # URLs de la app
+│   └── migrations/             # Migraciones de BD
+├── gamificacionProyecto/       # Configuración Django
+│   ├── settings.py             # Configuración principal
+│   ├── urls.py                 # URLs principales
+│   └── wsgi.py                 # Configuración WSGI
+├── gamified-learning-app/      # Frontend Next.js
+│   ├── app/                    # Páginas Next.js
+│   │   ├── admin/             # Panel de administración
+│   │   ├── login/             # Login regular
+│   │   ├── register/          # Registro de usuarios
+│   │   └── admin-login/       # Login administrativo
+│   ├── components/            # Componentes React
+│   ├── lib/                   # Utilidades
+│   │   └── api.ts             # Cliente API
+│   └── types/                 # Tipos TypeScript
+├── requirements.txt            # Dependencias Python
+├── package.json               # Dependencias Node.js
+├── docker-compose.yml         # Configuración Docker
+├── Dockerfile                 # Imagen Docker
+└── README.md                  # Este archivo
+```
+
+## 🔗 API Endpoints
 
 ### Autenticación
+- `POST /api/login/` - Login de usuarios
+- `POST /api/admin-login/` - Login administrativo
+- `POST /api/register/` - Registro de usuarios
+- `POST /api/logout/` - Logout
 
-- **NextAuth.js (v4):** Es una solución completa de autenticación para aplicaciones Next.js.
-  - **Propósito:** Maneja todo el flujo de inicio de sesión, registro y gestión de sesiones de usuario, ya sea con credenciales (email/contraseña) o proveedores externos (Google, GitHub, etc.).
+### Gestión de Usuarios (Solo Admin/Superadmin)
+- `GET /api/users/` - Lista todos los usuarios
+- `POST /api/users/create/` - Crear usuario
+- `GET /api/users/<id>/` - Detalles de usuario
+- `PUT /api/users/<id>/` - Actualizar usuario
+- `DELETE /api/users/<id>/` - Eliminar usuario
+- `GET /api/user-count/` - Conteo de usuarios
 
-### Interacción y Animaciones (Frontend)
+### Usuario Actual
+- `GET /api/user/` - Información del usuario autenticado
 
-- **Dnd Kit (`@dnd-kit/core`):** Una biblioteca moderna para funcionalidades de arrastrar y soltar (Drag and Drop).
-  - **Propósito:** Es la tecnología que impulsa el `BlocksGame` (Rompecabezas de Código), permitiendo al usuario arrastrar y ordenar bloques de código para resolver un ejercicio.
-- **Framer Motion:** Una biblioteca de animación para React.
-  - **Propósito:** Se utiliza para añadir animaciones fluidas a la interfaz, como transiciones de página o efectos al interactuar con los elementos, haciendo la experiencia de usuario más agradable.
+## 🔐 Sistema de Roles y Permisos
 
-### Validación de Datos
+### 1. Superadmin
+- **Control Total**: Puede gestionar todo el sistema
+- **Gestión de Usuarios**: Crear, editar, eliminar cualquier usuario
+- **Asignación de Roles**: Puede asignar cualquier rol
+- **Acceso Completo**: A todas las funcionalidades
 
-- **Zod:** Una biblioteca de declaración y validación de esquemas basada en TypeScript.
-  - **Propósito:** Se usa para garantizar que los datos tengan la forma correcta. Por ejemplo, antes de enviar los datos de un formulario a la API o antes de guardar datos en la base de datos, Zod puede validar que un email es realmente un email y que una contraseña cumple ciertos requisitos.
+### 2. Admin
+- **Gestión Limitada**: Puede gestionar usuarios regulares
+- **Usuarios**: Crear, editar, eliminar usuarios con rol "user"
+- **Restricciones**: No puede crear superadmins ni gestionar otros admins
 
-### Resumen en una Tabla
+### 3. User (Usuario Regular)
+- **Acceso Básico**: Solo puede acceder a funcionalidades básicas
+- **Sin Permisos**: No puede gestionar otros usuarios
 
-| Tecnología      | Rol en el Proyecto            | ¿Dónde se usa?                                          |
-| --------------- | ----------------------------- | ------------------------------------------------------- |
-| **Next.js**     | Framework Full-Stack          | Toda la aplicación (Frontend y Backend).                |
-| **React**       | Librería de UI                | Construcción de todos los componentes visuales.         |
-| **TypeScript**  | Lenguaje de Programación      | Escritura de todo el código para seguridad y claridad.  |
-| **Prisma**      | ORM (Base de Datos)           | Conexión y gestión de la base de datos desde el backend.|
-| **Tailwind CSS**| Estilos CSS                   | Diseño visual de toda la interfaz de usuario.           |
-| **shadcn/ui**   | Biblioteca de Componentes     | Botones, tarjetas, diálogos y otros elementos de UI.    |
-| **NextAuth.js** | Autenticación                 | Gestión de inicio de sesión y sesiones de usuario.      |
-| **Dnd Kit**     | Interacción (Drag & Drop)     | Mecánica principal del juego de rompecabezas de código. |
-| **Zustand**     | Gestión de Estado Global      | Compartir datos (ej. progreso del usuario) en toda la app.|
-| **Zod**         | Validación de Datos           | Asegurar la integridad de los datos en formularios y APIs.|
+## 🎨 Características de la Interfaz
 
+### Panel de Administración
+- **Dashboard**: Estadísticas en tiempo real
+- **Tabla de Usuarios**: Vista completa con paginación
+- **Modales Interactivos**: Crear, editar y eliminar usuarios
+- **Validación en Tiempo Real**: Formularios con feedback inmediato
+- **Responsive**: Funciona en todos los dispositivos
 
+### Diseño
+- **Tema Oscuro**: Interfaz moderna con colores UNAL
+- **Animaciones**: Transiciones suaves y efectos visuales
+- **Accesibilidad**: Cumple estándares de accesibilidad
+- **UX Optimizada**: Flujos intuitivos de usuario
+
+## 🐛 Solución de Problemas
+
+### Error de Puerto Ocupado
+```bash
+# Matar procesos en puertos
+# Windows
+netstat -ano | findstr :8000
+taskkill /PID <PID> /F
+
+# Linux/macOS
+lsof -ti:8000 | xargs kill -9
+```
+
+### Error de Dependencias
+```bash
+# Limpiar cache e instalar nuevamente
+# Python
+pip cache purge
+pip install -r requirements.txt --force-reinstall
+
+# Node.js
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Problemas de Base de Datos
+```bash
+# Resetear base de datos
+python manage.py flush
+python manage.py migrate
+
+# Recrear superadmin
+python manage.py shell -c "
+from authentication.models import CustomUser
+user = CustomUser.objects.create_user('elopezu@unal.edu.co', email='elopezu@unal.edu.co', password='BZTfne48')
+user.role='superadmin'
+user.save()
+"
+```
+
+## 📞 Soporte
+
+Para soporte técnico o preguntas sobre el proyecto:
+
+- **Desarrollador**: Esteban López
+- **Institución**: Universidad Nacional de Colombia
+- **Proyecto**: Centro de Información VR/AR - UNAL
+
+## 📄 Licencia
+
+Este proyecto es desarrollado para fines educativos y académicos en la Universidad Nacional de Colombia.
+
+---
+
+## 🎯 Inicio Rápido
+
+```bash
+# 1. Clonar repositorio
+git clone https://github.com/estebanLopezU/GamificacionInmersiva-2025.git
+cd GamificacionInmersiva-2025
+
+# 2. Configurar backend
+python -m venv venv
+venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+python manage.py migrate
+
+# 3. Configurar frontend
+cd gamified-learning-app
+npm install
+
+# 4. Ejecutar ambos servidores
+# Terminal 1 - Backend
+python manage.py runserver
+
+# Terminal 2 - Frontend
+cd gamified-learning-app
+npm run dev
+
+# 5. Acceder al sistema
+# Panel Admin: http://localhost:3000/admin
+# Superadmin: elopezu@unal.edu.co / BZTfne48
+```
+
+¡El sistema está listo para usar! 🚀

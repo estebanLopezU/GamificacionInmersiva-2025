@@ -16,8 +16,8 @@ export default function AdminLoginPage() {
   const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    // If user is already authenticated and is admin, redirect to admin page
-    if (!authLoading && user && user.role === 'admin') {
+    // If user is already authenticated and is admin or superadmin, redirect to admin page
+    if (!authLoading && user && (user.role === 'admin' || user.role === 'superadmin')) {
       router.push('/admin');
     }
   }, [user, authLoading, router]);
@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/admin-login/', {
+      const response = await fetch('http://localhost:8000/api/admin-login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

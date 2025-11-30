@@ -66,4 +66,51 @@ export const api = {
     });
     return response;
   },
+
+  // User management APIs
+  getUsers: async (token: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/users/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response;
+  },
+
+  createUser: async (token: string, userData: any) => {
+    const response = await fetch(`${API_BASE_URL}/api/users/create/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+    return response;
+  },
+
+  updateUser: async (token: string, userId: number, userData: any) => {
+    const response = await fetch(`${API_BASE_URL}/api/users/${userId}/`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+    return response;
+  },
+
+  deleteUser: async (token: string, userId: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/users/${userId}/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response;
+  },
 };

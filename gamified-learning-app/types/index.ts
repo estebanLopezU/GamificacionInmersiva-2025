@@ -1,8 +1,15 @@
 export interface User {
   id: number;
   username: string;
+  email: string;
   role: 'user' | 'admin';
-  email?: string;
+  user_type?: 'student' | 'professor';
+  display_name?: string;
+  academic_program?: string;
+  career?: string;
+  semester?: number;
+  job_title?: string;
+  is_permanent?: boolean;
 }
 
 export interface AuthTokens {

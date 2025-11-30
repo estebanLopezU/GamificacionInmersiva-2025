@@ -1,9 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import Head from "next/head";
+import { useRouter } from 'next/navigation';
 import styles from '../Home.module.css';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Games() {
+  const { user, loading: authLoading, logout } = useAuth(); // Use useAuth hook
+  const router = useRouter(); // Initialize useRouter
+
   const [mounted, setMounted] = useState(false);
   const [currentView, setCurrentView] = useState('welcome');
   const [selectedLanguage, setSelectedLanguage] = useState('');
@@ -21,6 +26,12 @@ export default function Games() {
   const [levelScores, setLevelScores] = useState<Record<string, number>>({});
 
   useEffect(() => {
+    // Authentication check
+    if (!authLoading && !user) {
+      router.push('/login');
+      return;
+    }
+
     setMounted(true);
     const savedProgress = localStorage.getItem('gameProgress');
     if (savedProgress) {
@@ -28,7 +39,7 @@ export default function Games() {
       setUnlockedLevels(progress.unlockedLevels || [0]);
       setLevelScores(progress.levelScores || {});
     }
-  }, []);
+  }, [user, authLoading, router]); // Add user and authLoading to dependencies
 
   useEffect(() => {
     if (mounted) {
@@ -38,6 +49,15 @@ export default function Games() {
       }));
     }
   }, [unlockedLevels, levelScores, mounted]);
+
+  // If still loading auth or user is not authenticated, render loading state
+  if (authLoading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   const levels = [
     { 
@@ -470,6 +490,19 @@ print(mensaje)  # Imprime "Hola, Ana!" en la consola</code></pre>
       </Head>
 
       <main className="min-h-screen relative overflow-hidden">
+        {/* User Header */}
+        <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-center p-4 bg-black bg-opacity-20">
+          <div className="text-white">
+            Bienvenido, <span className="font-bold">{user.display_name || user.username}</span>
+          </div>
+          <button
+            onClick={logout}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Logout
+          </button>
+        </div>
+
         {/* Fondo animado con partículas 3D */}
         <div className="fixed inset-0 z-0">
           {/* Gradiente animado de fondo */}
@@ -518,7 +551,7 @@ print(mensaje)  # Imprime "Hola, Ana!" en la consola</code></pre>
         )}
 
         {/* El contenido de tu página */}
-        <div className={`relative z-10 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'} transition-all duration-1000 pt-24`}>
+        <div className={`relative z-10 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'} transition-all duration-1000 pt-24 lg:pt-28`}>
 
 
           {/* Contenido Principal */}

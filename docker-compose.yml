@@ -37,7 +37,7 @@ services:
   react:
     working_dir: /app/gamified-learning-app
     image: node:20
-    command: sh -c "npm install && npm run dev -- -H 0.0.0.0"
+    command: sh -c "npm install && npx next dev -H 0.0.0.0"
     volumes:
       - ./gamified-learning-app:/app/gamified-learning-app
     ports:

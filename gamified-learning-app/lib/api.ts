@@ -12,14 +12,14 @@ export const getCookie = (name: string): string | null => {
 
 // API functions
 export const api = {
-  login: async (username: string, password: string) => {
+  login: async (email: string, password: string) => {
     const response = await fetch(`${API_BASE_URL}/api/login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCookie('csrftoken') || '',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username: email, password }),
     });
     return response;
   },

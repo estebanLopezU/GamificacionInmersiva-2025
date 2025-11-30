@@ -1,12 +1,14 @@
+"use client";
+
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
 import { User } from '@/types';
-import { api } from '@/lib/api';
+import { api, DJANGO_BASE_URL } from '@/lib/api';
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (user: User) => void; // Function to update user
   loading: boolean;
 }
 
@@ -15,7 +17,6 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     checkAuth();
@@ -36,25 +37,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        setUser(null);
       }
     } catch (error) {
       console.error('Auth check failed:', error);
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
+      setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (username: string, password: string) => {
-    const response = await api.login(username, password);
+  const login = async (email: string, password: string) => {
+    const response = await api.login(email, password);
     if (response.ok) {
       const data = await response.json();
       if (data.tokens) {
         localStorage.setItem('access_token', data.tokens.access);
         localStorage.setItem('refresh_token', data.tokens.refresh);
-        setUser(data);
-        router.push(data.role === 'admin' ? '/admin' : '/page');
+        // Assume user data is on the root of the response object, separate from tokens
+        const { tokens, ...userData } = data;
+        setUser(userData as User);
+        // The redirection will now be handled by the LoginPage component
       }
     } else {
       throw new Error('Login failed');
@@ -62,15 +67,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    await api.logout();
+    try {
+      await api.logout();
+    } catch (error) {
+      console.error("Logout failed, clearing tokens anyway.", error);
+    }
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     setUser(null);
-    window.location.href = 'http://localhost:8000';
+    // Redirect to the main Django page
+    window.location.href = DJANGO_BASE_URL;
+  };
+
+  const updateUser = (newUserData: User) => {
+    setUser(newUserData);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

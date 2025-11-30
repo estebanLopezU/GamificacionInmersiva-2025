@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
+import { AuthProvider } from '../hooks/useAuth';
 
 export const metadata: Metadata = {
   title: "Gamificación Inmersiva UNAL",
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className="antialiased">
-        <Header />
-        {children}
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

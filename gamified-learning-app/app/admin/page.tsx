@@ -1,83 +1,86 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '../../lib/api';
+import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 
 export default function AdminPage() {
-  const [user, setUser] = useState<{ username: string; role: string } | null>(null);
+  const { user, loading: authLoading, logout } = useAuth(); // Use useAuth hook
   const [userCount, setUserCount] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(true); // Loading state for data fetching
   const [error, setError] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Effect to handle token from URL parameters (for redirection from Django)
+  useEffect(() => {
+    const token = searchParams.get('token');
+    if (token && !user && !authLoading) {
+      // Save token to localStorage
+      localStorage.setItem('access_token', token);
+      // Remove token from URL
+      router.replace('/admin', undefined);
+      // The useAuth hook will detect the token and fetch user data
+    }
+  }, [searchParams, user, authLoading, router]);
 
   useEffect(() => {
-    // Check for token in URL params (from Django login)
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenFromUrl = urlParams.get('token');
-    if (tokenFromUrl) {
-      localStorage.setItem('access_token', tokenFromUrl);
-      // Remove token from URL
-      const url = new URL(window.location.href);
-      url.searchParams.delete('token');
-      window.history.replaceState({}, '', url);
-    }
+    const fetchData = async () => {
+      if (authLoading) {
+        return; // Still checking auth, wait
+      }
 
-    const checkAuthAndFetchData = async () => {
+      if (!user) {
+        // Not authenticated, redirect to login
+        router.push('/login');
+        return;
+      }
+
+      // Check if user is admin
+      if (user.role !== 'admin') {
+        router.push('/games'); // Redirect non-admin users to user page (games)
+        return;
+      }
+
+      setLoadingData(true);
       try {
-        const token = localStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token'); // Ensure token is available for API calls
         if (!token) {
-          router.push('/login');
+          await logout(); // Should not happen if user is set, but as a fallback
           return;
         }
 
-        // Check if user is authenticated and is admin
-        const userResponse = await api.getUser(token);
+        // Fetch user count
+        const countResponse = await api.getUserCount(token);
 
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
-          setUser(userData);
+        console.log('Admin: User count response status:', countResponse.status);
 
-          // Check if user is admin
-          if (userData.role !== 'admin') {
-            router.push('/page'); // Redirect non-admin users to user page
-            return;
-          }
-
-          // Fetch user count
-          const countResponse = await api.getUserCount(token);
-
-          console.log('Admin: User count response status:', countResponse.status);
-
-          if (countResponse.ok) {
-            const countData = await countResponse.json();
-            console.log('Admin: User count data:', countData);
-            setUserCount(countData.total_users);
-          } else {
-            const errorText = await countResponse.text();
-            console.error('Admin: User count error:', errorText);
-            setError('No se pudo obtener el conteo de usuarios');
-          }
+        if (countResponse.ok) {
+          const countData = await countResponse.json();
+          console.log('Admin: User count data:', countData);
+          setUserCount(countData.total_users);
         } else {
-          // Not authenticated, redirect to login
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          router.push('/login');
+          const errorText = await countResponse.text();
+          console.error('Admin: User count error:', errorText);
+          setError('No se pudo obtener el conteo de usuarios');
+          // Optionally, force logout if API token is invalid
+          if (countResponse.status === 401 || countResponse.status === 403) {
+            await logout();
+          }
         }
       } catch (error) {
         console.error('Error:', error);
         setError('Ocurrió un error al cargar los datos');
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        router.push('/login');
+        await logout(); // Logout on any data fetching error
       } finally {
-        setLoading(false);
+        setLoadingData(false);
       }
     };
 
-    checkAuthAndFetchData();
-  }, [router]);
+    fetchData();
+  }, [user, authLoading, router, logout]); // Depend on user, authLoading, router, and logout
 
-  if (loading) {
+  if (authLoading || loadingData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
         <div className="text-xl">Loading...</div>
@@ -85,8 +88,10 @@ export default function AdminPage() {
     );
   }
 
+  // If we reach here, user is loaded, not loading, and is an admin
+  // The redirects above will handle non-admin or unauthenticated users
   if (!user || user.role !== 'admin') {
-    return null; // Will redirect
+    return null; // Should have been redirected by useEffect
   }
 
   return (
@@ -207,7 +212,7 @@ export default function AdminPage() {
             <h2 className="text-2xl font-bold mb-4">Acciones Rápidas</h2>
             <div className="flex flex-wrap justify-center gap-4">
               <button
-                onClick={() => router.push('/page')}
+                onClick={() => router.push('/games')}
                 className="bg-white text-gray-900 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 Ver Centro de Gamificación

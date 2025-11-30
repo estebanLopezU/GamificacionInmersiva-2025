@@ -49,32 +49,128 @@
       <input type="text" id="username" name="username" required>
     </div>
     <div class="input-group">
+      <label for="email">Correo UNAL (@unal.edu.co)</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="input-group">
       <label for="password">Contraseña</label>
       <input type="password" id="password" name="password" required>
     </div>
     <div class="input-group">
         <label for="role">Rol</label>
         <select id="role" name="role" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; box-sizing: border-box;">
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
+            <option value="user">Usuario</option>
+            <option value="admin">Administrador</option>
         </select>
     </div>
+    <div class="input-group">
+        <label for="user_type">Tipo de Usuario</label>
+        <select id="user_type" name="user_type" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; box-sizing: border-box;" required>
+            <option value="">Seleccionar...</option>
+            <option value="student">Estudiante</option>
+            <option value="professor">Profesor</option>
+        </select>
+    </div>
+    <div class="input-group">
+      <label for="display_name">Nombre Completo</label>
+      <input type="text" id="display_name" name="display_name">
+    </div>
+
+    <!-- Student fields -->
+    <div id="student_fields" style="display: none;">
+      <div class="input-group">
+        <label for="career">Carrera</label>
+        <input type="text" id="career" name="career">
+      </div>
+      <div class="input-group">
+        <label for="semester">Semestre</label>
+        <input type="number" id="semester" name="semester" min="1" max="20">
+      </div>
+      <div class="input-group">
+        <label for="academic_program">Programa Académico</label>
+        <input type="text" id="academic_program" name="academic_program">
+      </div>
+    </div>
+
+    <!-- Professor fields -->
+    <div id="professor_fields" style="display: none;">
+      <div class="input-group">
+        <label for="job_title">Cargo</label>
+        <input type="text" id="job_title" name="job_title">
+      </div>
+      <div class="input-group">
+        <label for="is_permanent">Tipo de Contratación</label>
+        <select id="is_permanent" name="is_permanent" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; box-sizing: border-box;">
+            <option value="">Seleccionar...</option>
+            <option value="true">Profesor de Planta</option>
+            <option value="false">Profesor Ocasional</option>
+        </select>
+      </div>
+    </div>
+
     <button type="submit" class="btn">Registrarse</button>
     <p class="sub-text"><a href="/">¿Ya tienes cuenta? Inicia sesión</a></p>
   </form>
 
   <script>
+    // Handle user type change to show/hide fields
+    const userTypeSelect = document.getElementById('user_type');
+    const studentFields = document.getElementById('student_fields');
+    const professorFields = document.getElementById('professor_fields');
+
+    userTypeSelect.addEventListener('change', function() {
+      const userType = this.value;
+      if (userType === 'student') {
+        studentFields.style.display = 'block';
+        professorFields.style.display = 'none';
+        // Make student fields required
+        document.getElementById('career').required = true;
+        document.getElementById('semester').required = true;
+        document.getElementById('job_title').required = false;
+        document.getElementById('is_permanent').required = false;
+      } else if (userType === 'professor') {
+        studentFields.style.display = 'none';
+        professorFields.style.display = 'block';
+        // Make professor fields required
+        document.getElementById('career').required = false;
+        document.getElementById('semester').required = false;
+        document.getElementById('job_title').required = true;
+        document.getElementById('is_permanent').required = true;
+      } else {
+        studentFields.style.display = 'none';
+        professorFields.style.display = 'none';
+        document.getElementById('career').required = false;
+        document.getElementById('semester').required = false;
+        document.getElementById('job_title').required = false;
+        document.getElementById('is_permanent').required = false;
+      }
+    });
+
     const registerForm = document.getElementById('registerForm');
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const username = registerForm.querySelector('#username').value;
-      const password = registerForm.querySelector('#password').value;
-      const role = registerForm.querySelector('#role').value;
+
+      const formData = new FormData(registerForm);
+      const data = {
+        username: formData.get('username'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        role: formData.get('role'),
+        user_type: formData.get('user_type'),
+        display_name: formData.get('display_name'),
+        career: formData.get('career') || null,
+        semester: formData.get('semester') ? parseInt(formData.get('semester')) : null,
+        academic_program: formData.get('academic_program') || null,
+        job_title: formData.get('job_title') || null,
+        is_permanent: formData.get('is_permanent') === 'true' ? true : formData.get('is_permanent') === 'false' ? false : null
+      };
+
+      // Remove null values
+      Object.keys(data).forEach(key => data[key] === null && delete data[key]);
 
       try {
         const csrfToken = getCookie('csrftoken');
-        console.log('CSRF Token:', csrfToken);
-        console.log('Sending data:', { username, password, role });
+        console.log('Sending data:', data);
 
         const response = await fetch('/api/register/', {
           method: 'POST',
@@ -82,11 +178,10 @@
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken || '',
           },
-          body: JSON.stringify({ username, password, role }),
+          body: JSON.stringify(data),
         });
 
         console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
 
         if (response.ok) {
           const data = await response.json();
@@ -106,7 +201,11 @@
           const errorBanner = document.getElementById('errorBanner');
           let errorMessage = 'Registration failed: ';
           for (const key in errorData) {
-              errorMessage += `${key}: ${errorData[key].join(', ')} `;
+              if (Array.isArray(errorData[key])) {
+                errorMessage += `${key}: ${errorData[key].join(', ')} `;
+              } else {
+                errorMessage += `${key}: ${errorData[key]} `;
+              }
           }
           errorBanner.textContent = errorMessage;
           errorBanner.style.display = 'block';

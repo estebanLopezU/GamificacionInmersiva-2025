@@ -293,7 +293,7 @@ python manage.py migrate
 # Recrear superadmin
 python manage.py shell -c "
 from authentication.models import CustomUser
-user = CustomUser.objects.create_user('elopezu@unal.edu.co', email='elopezu@unal.edu.co', password='BZTfne48')
+user = CustomUser.objects.create_user('example@unal.edu.co', email='example@unal.edu.co', password='')
 user.role='superadmin'
 user.save()
 "

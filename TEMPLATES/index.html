@@ -406,16 +406,7 @@
         </div>
     </div>
 
-    <div id="userTypeModal" class="modal">
-      <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h3>¿Cómo deseas acceder?</h3>
-        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
-          <button id="selectUserBtn" class="btn">Usuario</button>
-          <button id="selectAdminBtn" class="btn" style="background: linear-gradient(90deg, #ffb86b, #ff7b7b);">Administrador</button>
-        </div>
-      </div>
-    </div>
+
   </div>
 
   <script type="module">
@@ -1173,10 +1164,6 @@
     const helpModal = document.getElementById('helpModal');
     const helpBtn = document.getElementById('helpBtn');
     const helpModalCloseBtn = helpModal.querySelector('.close-button');
-    const userTypeModal = document.getElementById('userTypeModal');
-    const userTypeModalCloseBtn = userTypeModal.querySelector('.close-button');
-    const selectUserBtn = document.getElementById('selectUserBtn');
-    const selectAdminBtn = document.getElementById('selectAdminBtn');
     const cancelAdminLoginBtn = document.getElementById('cancelAdminLoginBtn');
 
     const planetInfo = {
@@ -1250,10 +1237,7 @@
       uiSounds.close.play();
     }
 
-    function closeUserTypeModal() {
-      userTypeModal.classList.remove('show');
-      uiSounds.close.play();
-    }
+
 
 
     function hideBuildControls() {
@@ -1384,20 +1368,7 @@
       event.stopPropagation();
       clearTimeout(buildControlsTimeout);
       hideBuildControls();
-      userTypeModal.classList.add('show');
-      uiSounds.open.play();
-    });
-
-    selectUserBtn.addEventListener('click', (event) => {
-      event.stopPropagation();
-      closeUserTypeModal();
-      travelToLogin(false); // false indica que es para usuario normal
-    });
-
-    selectAdminBtn.addEventListener('click', (event) => {
-      event.stopPropagation();
-      closeUserTypeModal();
-      travelToLogin(true); // true indica que es para administrador
+      travelToLogin(false); // Ir directamente al login normal
     });
     cancelLoginBtn.addEventListener('click', (event) => {
       uiSounds.close.play();
@@ -1426,8 +1397,6 @@
     });
     helpModalCloseBtn.addEventListener('click', closeHelpModal);
     helpModal.addEventListener('click', (event) => { if (event.target === helpModal) closeHelpModal(); });
-    userTypeModalCloseBtn.addEventListener('click', closeUserTypeModal);
-    userTypeModal.addEventListener('click', (event) => { if (event.target === userTypeModal) closeUserTypeModal(); });
 
 
     const infoPoints = [

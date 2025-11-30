@@ -4,218 +4,806 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Registro de Usuario</title>
+  <title>Registro de Usuario - UNAL VR/AR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{ --bg:#050814; --card-bg: rgba(255,255,255,0.04); }
-    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
-    body{background:linear-gradient(180deg,#020412 0%, #071026 60%); color:#eaf6ff; overflow:hidden}
-    .login-form {
+    :root {
+      --bg-primary: #050814;
+      --bg-secondary: #020412;
+      --card-bg: rgba(255,255,255,0.04);
+      --text-primary: #eaf6ff;
+      --text-secondary: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --success: #10b981;
+      --error: #ef4444;
+      --warning: #f59e0b;
+      --glass-bg: rgba(255,255,255,0.08);
+      --glass-border: rgba(255,255,255,0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, #0f172a 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(120, 255, 214, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+      animation: backgroundFloat 20s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes backgroundFloat {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(16px) saturate(180%);
+      background: rgba(5, 8, 20, 0.85);
+      border-bottom: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .navbar-logo {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .navbar-logo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+    }
+
+    .navbar-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .navbar-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .navbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link::before {
+      content: '';
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 80;
-      background: var(--card-bg);
-      padding: 30px; border-radius: 14px;
-      box-shadow: 0 8px 40px rgba(2,8,23,0.8);
-      width: 320px;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+      transition: left 0.5s ease;
     }
-    .login-form h2 { text-align: center; margin-top: 0; }
-    .login-form .input-group { margin-bottom: 15px; }
-    .login-form label { display: block; margin-bottom: 5px; font-size: 0.9rem; opacity: 0.8; }
-    .login-form input { width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; box-sizing: border-box; }
-    .btn {
-        background: linear-gradient(90deg,#78ffd6,#59d0ff);
-        border: none;
-        padding: 8px 12px;
-        border-radius: 10px;
-        font-weight: 700;
-        cursor: pointer;
-        width: 100%;
-        padding: 12px;
-        margin-top: 10px;
+
+    .nav-link:hover::before {
+      left: 100%;
     }
-    .sub-text { text-align: center; font-size: 0.8rem; margin-top: 15px; }
-    .sub-text a { color: #78ffd6; text-decoration: none; }
-    .error-banner{position:absolute;left:50%;top:20px;transform:translateX(-50%);z-index:1000;background:rgba(255,60,60,0.12);border:1px solid rgba(255,60,60,0.2);color:#fff;padding:8px 12px;border-radius:8px;backdrop-filter: blur(4px);display:none}
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: rgba(6, 182, 212, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .nav-link.active {
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.15);
+    }
+
+    /* Main Content */
+    .main-content {
+      padding-top: 6rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2rem 2rem;
+    }
+
+    /* Form Container */
+    .form-container {
+      width: 100%;
+      max-width: 480px;
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Form Card */
+    .form-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      box-shadow:
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 1px 0 rgba(255, 255, 255, 0.1) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.5), transparent);
+    }
+
+    /* Form Header */
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-title {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.025em;
+    }
+
+    .form-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    /* Form Groups */
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.75rem center;
+      background-repeat: no-repeat;
+      background-size: 1rem;
+      padding-right: 2.5rem;
+    }
+
+    /* Dynamic Fields */
+    .dynamic-fields {
+      margin-top: 1rem;
+      padding: 1.5rem;
+      background: rgba(6, 182, 212, 0.05);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      border-radius: 1rem;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .dynamic-fields.hidden {
+      display: none;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border: none;
+      border-radius: 0.75rem;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Footer Links */
+    .form-footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .footer-link {
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-link:hover {
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    /* Error Banner */
+    .error-banner {
+      position: fixed;
+      top: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fecaca;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.2);
+      display: none;
+      animation: slideDown 0.3s ease-out;
+      max-width: 90%;
+      word-wrap: break-word;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 640px) {
+      .navbar-content {
+        padding: 0 1rem;
+      }
+
+      .navbar-title {
+        font-size: 1.125rem;
+      }
+
+      .navbar-subtitle {
+        font-size: 0.6875rem;
+      }
+
+      .navbar-nav {
+        gap: 1rem;
+      }
+
+      .nav-link {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8125rem;
+      }
+
+      .main-content {
+        padding: 5rem 1rem 2rem;
+      }
+
+      .form-card {
+        padding: 2rem;
+      }
+
+      .form-title {
+        font-size: 1.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar-nav {
+        display: none;
+      }
+
+      .form-card {
+        padding: 1.5rem;
+      }
+
+      .form-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Loading State */
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--accent-cyan);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Success Animation */
+    @keyframes successPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .success {
+      animation: successPulse 0.6s ease-out;
+    }
   </style>
 </head>
 <body>
   {% csrf_token %}
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <a href="/" class="navbar-brand">
+        <div class="navbar-logo">
+          <img src="/UNAL.webp" alt="UNAL" style="width: 24px; height: 24px; filter: brightness(0) invert(1);" onerror="this.style.display='none'">
+        </div>
+        <div>
+          <div class="navbar-title">Centro VR/AR</div>
+          <div class="navbar-subtitle">Universidad Nacional</div>
+        </div>
+      </a>
+
+      <div class="navbar-nav">
+        <a href="/" class="nav-link">
+          <span>Inicio</span>
+        </a>
+        <a href="/register" class="nav-link active">
+          <span>Registro</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="form-container">
+      <div class="form-card">
+        <div class="form-header">
+          <h1 class="form-title">Crear Cuenta</h1>
+          <p class="form-subtitle">Únete al Centro de Información VR/AR - UNAL</p>
+        </div>
+
+        <form id="registerForm">
+          <!-- Basic Information -->
+          <div class="form-group">
+            <label for="username" class="form-label">Nombre de Usuario</label>
+            <input type="text" id="username" name="username" class="form-input" placeholder="tu_usuario" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Correo Institucional</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="usuario@unal.edu.co" required>
+            <small style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem; display: block;">
+              Solo correos @unal.edu.co
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+            <small style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem; display: block;">
+              Mínimo 8 caracteres
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="display_name" class="form-label">Nombre Completo</label>
+            <input type="text" id="display_name" name="display_name" class="form-input" placeholder="Juan Pérez">
+          </div>
+
+          <!-- User Type Selection -->
+          <div class="form-group">
+            <label for="user_type" class="form-label">Tipo de Usuario</label>
+            <select id="user_type" name="user_type" class="form-select" required>
+              <option value="">Seleccionar tipo de usuario...</option>
+              <option value="student">🎓 Estudiante</option>
+              <option value="professor">👨‍🏫 Profesor</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Student Fields -->
+          <div id="student_fields" class="dynamic-fields hidden">
+            <h3 style="color: var(--accent-cyan); font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">
+              📚 Información Académica
+            </h3>
+
+            <div class="form-group">
+              <label for="career" class="form-label">Carrera</label>
+              <input type="text" id="career" name="career" class="form-input" placeholder="Ingeniería de Sistemas">
+            </div>
+
+            <div class="form-group">
+              <label for="semester" class="form-label">Semestre Actual</label>
+              <input type="number" id="semester" name="semester" class="form-input" placeholder="5" min="1" max="20">
+            </div>
+
+            <div class="form-group">
+              <label for="academic_program" class="form-label">Programa Académico</label>
+              <input type="text" id="academic_program" name="academic_program" class="form-input" placeholder="Pregrado">
+            </div>
+          </div>
+
+          <!-- Dynamic Professor Fields -->
+          <div id="professor_fields" class="dynamic-fields hidden">
+            <h3 style="color: var(--accent-cyan); font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">
+              👨‍🏫 Información Profesional
+            </h3>
+
+            <div class="form-group">
+              <label for="job_title" class="form-label">Cargo Académico</label>
+              <input type="text" id="job_title" name="job_title" class="form-input" placeholder="Profesor Asistente">
+            </div>
+
+            <div class="form-group">
+              <label for="is_permanent" class="form-label">Tipo de Contratación</label>
+              <select id="is_permanent" name="is_permanent" class="form-select">
+                <option value="">Seleccionar...</option>
+                <option value="true">🏛️ Profesor de Planta</option>
+                <option value="false">⏰ Profesor Ocasional</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Hidden Role Field (Auto-set based on context) -->
+          <input type="hidden" id="role" name="role" value="user">
+
+          <!-- Submit Button -->
+          <button type="submit" id="submitBtn" class="submit-btn">
+            <span id="btnText">Crear Cuenta</span>
+          </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="form-footer">
+          <a href="/" class="footer-link">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            </svg>
+            ¿Ya tienes cuenta? Inicia sesión
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Error Banner -->
   <div id="errorBanner" class="error-banner" role="alert"></div>
-  <form id="registerForm" class="login-form">
-    <h2>Registro</h2>
-    <div class="input-group">
-      <label for="username">Usuario</label>
-      <input type="text" id="username" name="username" required>
-    </div>
-    <div class="input-group">
-      <label for="email">Correo UNAL (@unal.edu.co)</label>
-      <input type="email" id="email" name="email" required>
-    </div>
-    <div class="input-group">
-      <label for="password">Contraseña</label>
-      <input type="password" id="password" name="password" required>
-    </div>
-    <div class="input-group">
-        <label for="role">Rol</label>
-        <select id="role" name="role" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; box-sizing: border-box;">
-            <option value="user">Usuario</option>
-            <option value="admin">Administrador</option>
-        </select>
-    </div>
-    <div class="input-group">
-        <label for="user_type">Tipo de Usuario</label>
-        <select id="user_type" name="user_type" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; box-sizing: border-box;" required>
-            <option value="">Seleccionar...</option>
-            <option value="student">Estudiante</option>
-            <option value="professor">Profesor</option>
-        </select>
-    </div>
-    <div class="input-group">
-      <label for="display_name">Nombre Completo</label>
-      <input type="text" id="display_name" name="display_name">
-    </div>
-
-    <!-- Student fields -->
-    <div id="student_fields" style="display: none;">
-      <div class="input-group">
-        <label for="career">Carrera</label>
-        <input type="text" id="career" name="career">
-      </div>
-      <div class="input-group">
-        <label for="semester">Semestre</label>
-        <input type="number" id="semester" name="semester" min="1" max="20">
-      </div>
-      <div class="input-group">
-        <label for="academic_program">Programa Académico</label>
-        <input type="text" id="academic_program" name="academic_program">
-      </div>
-    </div>
-
-    <!-- Professor fields -->
-    <div id="professor_fields" style="display: none;">
-      <div class="input-group">
-        <label for="job_title">Cargo</label>
-        <input type="text" id="job_title" name="job_title">
-      </div>
-      <div class="input-group">
-        <label for="is_permanent">Tipo de Contratación</label>
-        <select id="is_permanent" name="is_permanent" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; box-sizing: border-box;">
-            <option value="">Seleccionar...</option>
-            <option value="true">Profesor de Planta</option>
-            <option value="false">Profesor Ocasional</option>
-        </select>
-      </div>
-    </div>
-
-    <button type="submit" class="btn">Registrarse</button>
-    <p class="sub-text"><a href="/">¿Ya tienes cuenta? Inicia sesión</a></p>
-  </form>
 
   <script>
-    // Handle user type change to show/hide fields
-    const userTypeSelect = document.getElementById('user_type');
-    const studentFields = document.getElementById('student_fields');
-    const professorFields = document.getElementById('professor_fields');
+    // Enhanced form functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Handle user type change to show/hide fields
+      const userTypeSelect = document.getElementById('user_type');
+      const studentFields = document.getElementById('student_fields');
+      const professorFields = document.getElementById('professor_fields');
 
-    userTypeSelect.addEventListener('change', function() {
-      const userType = this.value;
-      if (userType === 'student') {
-        studentFields.style.display = 'block';
-        professorFields.style.display = 'none';
-        // Make student fields required
-        document.getElementById('career').required = true;
-        document.getElementById('semester').required = true;
-        document.getElementById('job_title').required = false;
-        document.getElementById('is_permanent').required = false;
-      } else if (userType === 'professor') {
-        studentFields.style.display = 'none';
-        professorFields.style.display = 'block';
-        // Make professor fields required
-        document.getElementById('career').required = false;
-        document.getElementById('semester').required = false;
-        document.getElementById('job_title').required = true;
-        document.getElementById('is_permanent').required = true;
-      } else {
-        studentFields.style.display = 'none';
-        professorFields.style.display = 'none';
-        document.getElementById('career').required = false;
-        document.getElementById('semester').required = false;
-        document.getElementById('job_title').required = false;
-        document.getElementById('is_permanent').required = false;
-      }
-    });
+      userTypeSelect.addEventListener('change', function() {
+        const userType = this.value;
+        if (userType === 'student') {
+          studentFields.classList.remove('hidden');
+          professorFields.classList.add('hidden');
+          // Make student fields required
+          document.getElementById('career').required = true;
+          document.getElementById('semester').required = true;
+          document.getElementById('job_title').required = false;
+          document.getElementById('is_permanent').required = false;
+        } else if (userType === 'professor') {
+          studentFields.classList.add('hidden');
+          professorFields.classList.remove('hidden');
+          // Make professor fields required
+          document.getElementById('career').required = false;
+          document.getElementById('semester').required = false;
+          document.getElementById('job_title').required = true;
+          document.getElementById('is_permanent').required = true;
+        } else {
+          studentFields.classList.add('hidden');
+          professorFields.classList.add('hidden');
+          document.getElementById('career').required = false;
+          document.getElementById('semester').required = false;
+          document.getElementById('job_title').required = false;
+          document.getElementById('is_permanent').required = false;
+        }
+      });
 
-    const registerForm = document.getElementById('registerForm');
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+      const registerForm = document.getElementById('registerForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const formCard = document.querySelector('.form-card');
 
-      const formData = new FormData(registerForm);
-      const data = {
-        username: formData.get('username'),
-        email: formData.get('email'),
-        password: formData.get('password'),
-        role: formData.get('role'),
-        user_type: formData.get('user_type'),
-        display_name: formData.get('display_name'),
-        career: formData.get('career') || null,
-        semester: formData.get('semester') ? parseInt(formData.get('semester')) : null,
-        academic_program: formData.get('academic_program') || null,
-        job_title: formData.get('job_title') || null,
-        is_permanent: formData.get('is_permanent') === 'true' ? true : formData.get('is_permanent') === 'false' ? false : null
-      };
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-      // Remove null values
-      Object.keys(data).forEach(key => data[key] === null && delete data[key]);
+        // Set loading state
+        submitBtn.classList.add('loading');
+        btnText.innerHTML = '<span class="spinner"></span>Creando cuenta...';
+        formCard.classList.add('loading');
 
-      try {
-        const csrfToken = getCookie('csrftoken');
-        console.log('Sending data:', data);
+        const formData = new FormData(registerForm);
+        const data = {
+          username: formData.get('username'),
+          email: formData.get('email'),
+          password: formData.get('password'),
+          role: formData.get('role'),
+          user_type: formData.get('user_type'),
+          display_name: formData.get('display_name'),
+          career: formData.get('career') || null,
+          semester: formData.get('semester') ? parseInt(formData.get('semester')) : null,
+          academic_program: formData.get('academic_program') || null,
+          job_title: formData.get('job_title') || null,
+          is_permanent: formData.get('is_permanent') === 'true' ? true : formData.get('is_permanent') === 'false' ? false : null
+        };
 
-        const response = await fetch('/api/register/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken || '',
-          },
-          body: JSON.stringify(data),
+        // Remove null values
+        Object.keys(data).forEach(key => data[key] === null && delete data[key]);
+
+        try {
+          const csrfToken = getCookie('csrftoken');
+          console.log('Sending data:', data);
+
+          const response = await fetch('/api/register/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken || '',
+            },
+            body: JSON.stringify(data),
+          });
+
+          console.log('Response status:', response.status);
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Success data:', data);
+
+            // Success animation
+            submitBtn.classList.remove('loading');
+            submitBtn.classList.add('success');
+            btnText.textContent = '¡Cuenta creada!';
+            formCard.classList.remove('loading');
+
+            // Redirect after success animation
+            setTimeout(() => {
+              if (data.redirect_url) {
+                console.log('Redirecting to:', data.redirect_url);
+                window.location.href = data.redirect_url;
+              } else {
+                // Fallback redirect
+                console.log('Fallback redirect');
+                window.location.href = 'http://localhost:3000/page';
+              }
+            }, 1500);
+
+          } else {
+            const errorData = await response.json();
+            console.log('Error data:', errorData);
+
+            // Reset loading state
+            submitBtn.classList.remove('loading');
+            btnText.textContent = 'Crear Cuenta';
+            formCard.classList.remove('loading');
+
+            // Show error
+            const errorBanner = document.getElementById('errorBanner');
+            let errorMessage = 'Error en el registro: ';
+            for (const key in errorData) {
+                if (Array.isArray(errorData[key])) {
+                  errorMessage += `${key}: ${errorData[key].join(', ')} `;
+                } else {
+                  errorMessage += `${key}: ${errorData[key]} `;
+                }
+            }
+            errorBanner.textContent = errorMessage;
+            errorBanner.style.display = 'block';
+
+            // Auto-hide error after 5 seconds
+            setTimeout(() => {
+              errorBanner.style.display = 'none';
+            }, 5000);
+          }
+        } catch (error) {
+          console.error('Fetch error:', error);
+
+          // Reset loading state
+          submitBtn.classList.remove('loading');
+          btnText.textContent = 'Crear Cuenta';
+          formCard.classList.remove('loading');
+
+          // Show network error
+          const errorBanner = document.getElementById('errorBanner');
+          errorBanner.textContent = 'Error de conexión: ' + error.message;
+          errorBanner.style.display = 'block';
+
+          // Auto-hide error after 5 seconds
+          setTimeout(() => {
+            errorBanner.style.display = 'none';
+          }, 5000);
+        }
+      });
+
+      // Real-time validation feedback
+      const inputs = document.querySelectorAll('.form-input, .form-select');
+      inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+          if (this.checkValidity()) {
+            this.style.borderColor = 'var(--success)';
+          } else {
+            this.style.borderColor = 'var(--error)';
+          }
         });
 
-        console.log('Response status:', response.status);
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Success data:', data);
-          // Redirect to the URL provided by the server
-          if (data.redirect_url) {
-            console.log('Redirecting to:', data.redirect_url);
-            window.location.href = data.redirect_url;
-          } else {
-            // Fallback redirect
-            console.log('Fallback redirect');
-            window.location.href = 'http://localhost:3000/page';
-          }
-        } else {
-          const errorData = await response.json();
-          console.log('Error data:', errorData);
-          const errorBanner = document.getElementById('errorBanner');
-          let errorMessage = 'Registration failed: ';
-          for (const key in errorData) {
-              if (Array.isArray(errorData[key])) {
-                errorMessage += `${key}: ${errorData[key].join(', ')} `;
-              } else {
-                errorMessage += `${key}: ${errorData[key]} `;
-              }
-          }
-          errorBanner.textContent = errorMessage;
-          errorBanner.style.display = 'block';
-        }
-      } catch (error) {
-        console.error('Fetch error:', error);
-        const errorBanner = document.getElementById('errorBanner');
-        errorBanner.textContent = 'Network error: ' + error.message;
-        errorBanner.style.display = 'block';
-      }
+        input.addEventListener('focus', function() {
+          this.style.borderColor = 'var(--accent-cyan)';
+        });
+      });
     });
 
     function getCookie(name) {

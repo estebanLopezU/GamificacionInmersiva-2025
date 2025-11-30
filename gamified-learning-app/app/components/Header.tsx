@@ -84,6 +84,18 @@ export default function Header() {
                 <span className="relative z-10">Juegos</span>
                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 group-hover:w-full transition-all duration-300"></div>
               </Link>
+              <Link
+                href="/admin-login"
+                className="relative px-3 lg:px-4 py-2 text-sm lg:text-base font-medium text-orange-300 hover:text-orange-100 transition-all duration-200 rounded-lg hover:bg-orange-500/10 group"
+              >
+                <span className="relative z-10 flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Admin
+                </span>
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-orange-400 to-red-400 group-hover:w-full transition-all duration-300"></div>
+              </Link>
             </nav>
 
             {/* User Section */}

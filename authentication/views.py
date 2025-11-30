@@ -108,6 +108,80 @@ class LoginView(views.APIView):
             traceback.print_exc()
             return Response({'error': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@method_decorator(csrf_exempt, name='dispatch')
+class AdminLoginView(views.APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        try:
+            print("=== ADMIN LOGIN REQUEST DEBUG ===")
+            print(f"Content-Type: {request.META.get('CONTENT_TYPE')}")
+
+            # Use DRF parsed data
+            email = request.data.get('username')  # username field is email
+            password = request.data.get('password')
+            print(f"Parsed JSON data: {request.data}")
+
+            print(f"Extracted email: '{email}', password length: {len(password) if password else 0}")
+
+            if not email or not password:
+                return Response({'error': 'Email and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Check if user exists
+            try:
+                user_obj = CustomUser.objects.get(email=email)
+                print(f"Found user: {user_obj.email}, is_active: {user_obj.is_active}, role: {user_obj.role}")
+
+                # Check if user is admin
+                if user_obj.role != 'admin':
+                    print(f"User '{email}' is not an admin (role: {user_obj.role})")
+                    return Response({'error': 'Access denied. Admin privileges required.'}, status=status.HTTP_403_FORBIDDEN)
+
+            except CustomUser.DoesNotExist:
+                print(f"User with email '{email}' not found")
+                return Response({'error': 'User not registered. Please register first.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Try to authenticate - simplified approach
+            print("Attempting admin authentication...")
+            user = authenticate(request=request, username=email, password=password)
+            print(f"Auth result: {user}")
+
+            if user is not None:
+                print("Admin authentication successful, generating tokens...")
+                login(request, user)
+
+                # Test token generation separately
+                try:
+                    refresh = RefreshToken.for_user(user)
+                    access_token = str(refresh.access_token)
+                    print(f"Token generation successful, access token length: {len(access_token)}")
+                except Exception as token_error:
+                    print(f"Token generation failed: {token_error}")
+                    return Response({'error': 'Token generation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                # Return JSON with redirect URL for admin
+                redirect_url = f"http://localhost:3000/admin?token={access_token}"
+
+                print(f"Admin login successful for user: {user.email}")
+                return Response({
+                    'success': True,
+                    'redirect_url': redirect_url,
+                    'role': user.role,
+                    'tokens': {
+                        'access': access_token,
+                        'refresh': str(refresh)
+                    }
+                })
+            else:
+                print("Admin authentication failed - incorrect password")
+                return Response({'error': 'Incorrect password.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            print(f"Unexpected admin login error: {e}")
+            import traceback
+            traceback.print_exc()
+            return Response({'error': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class LogoutView(views.APIView):
     def post(self, request):
         logout(request)

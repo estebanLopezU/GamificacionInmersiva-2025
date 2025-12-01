@@ -1,2 +1,12 @@
 WARNING 2025-11-30 09:46:56,951 log 23192 14356 Not Found: /favicon.ico
 WARNING 2025-11-30 09:47:55,896 log 23192 2228 Unauthorized: /api/user/
+WARNING 2025-11-30 09:58:09,920 log 23192 6692 Forbidden: /api/logout/
+WARNING 2025-11-30 09:58:11,942 log 23192 33436 Not Found: /favicon.ico
+WARNING 2025-11-30 09:58:31,631 log 23192 33436 Bad Request: /api/login/
+WARNING 2025-11-30 09:58:31,814 log 23192 33436 Not Found: /UNAL.webp
+WARNING 2025-11-30 09:58:46,416 log 23192 33436 Bad Request: /api/register/
+WARNING 2025-11-30 10:00:08,463 log 23192 19512 Forbidden: /api/admin-login/
+WARNING 2025-11-30 10:01:02,622 log 23192 23496 Forbidden: /api/logout/
+WARNING 2025-11-30 10:02:17,600 log 23192 24448 Bad Request: /api/login/
+WARNING 2025-11-30 10:02:17,797 log 23192 24448 Not Found: /UNAL.webp
+WARNING 2025-11-30 10:02:58,860 log 23192 24448 Bad Request: /api/register/

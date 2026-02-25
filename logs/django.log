@@ -12,3 +12,175 @@ WARNING 2025-11-30 10:02:17,797 log 23192 24448 Not Found: /UNAL.webp
 WARNING 2025-11-30 10:02:58,860 log 23192 24448 Bad Request: /api/register/
 WARNING 2025-12-01 07:26:51,205 log 22644 2136 Not Found: /favicon.ico
 WARNING 2025-12-01 07:28:37,017 log 22644 31988 Unauthorized: /api/user/
+WARNING 2026-02-25 14:44:34,138 log 15124 14080 Not Found: /favicon.ico
+WARNING 2026-02-25 14:44:43,870 log 15124 12272 Not Found: /favicon.ico
+WARNING 2026-02-25 14:46:48,012 log 15124 17276 Bad Request: /api/login/
+WARNING 2026-02-25 14:46:48,034 log 15124 17276 Not Found: /UNAL.webp
+WARNING 2026-02-25 14:52:20,660 log 15124 20160 Not Found: /favicon.ico
+WARNING 2026-02-25 14:52:48,284 log 15124 20160 Bad Request: /api/login/
+WARNING 2026-02-25 14:52:48,308 log 15124 20160 Not Found: /UNAL.webp
+WARNING 2026-02-25 14:54:12,758 log 15124 5016 Unauthorized: /api/user/
+WARNING 2026-02-25 14:54:13,762 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:13,857 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:13,941 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,036 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,129 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,228 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,328 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,418 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,509 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,606 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,692 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,776 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,861 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:14,959 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,046 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,134 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,218 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,307 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,396 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,489 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,587 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,678 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,767 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,862 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:15,949 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,040 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,137 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,221 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,311 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,409 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,513 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,603 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,701 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,796 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,891 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:16,981 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,073 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,163 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,256 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,343 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,426 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,509 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,607 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,700 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,782 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,873 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:17,958 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,056 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,141 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,229 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,315 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,410 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,496 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,584 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,706 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,801 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,892 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:18,985 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,073 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,168 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,398 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,480 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,563 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,650 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,736 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,837 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:19,924 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,018 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,108 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,197 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,287 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,375 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,463 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,554 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,641 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,735 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,821 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:20,908 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:21,028 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:21,138 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:21,239 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:21,338 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:21,443 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:21,537 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:21,760 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:21,864 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,005 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,110 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,210 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,310 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,417 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,523 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,641 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,749 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,861 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:22,976 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:23,123 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:23,230 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:23,331 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:23,442 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:23,611 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:23,698 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:23,798 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:23,905 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,049 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,163 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,275 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,389 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,499 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,601 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,699 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,854 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:24,976 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:25,095 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:25,231 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:25,334 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:25,431 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:25,538 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:25,645 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:25,753 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:25,856 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,058 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,170 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,292 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,414 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,524 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,625 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,722 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,822 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:26,928 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,051 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,222 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,317 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,404 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,502 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,584 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,660 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,749 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,848 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:27,943 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,031 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,114 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,201 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,293 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,378 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,463 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,550 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,642 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,734 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,815 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,898 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:28,999 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:29,082 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 14:54:29,177 log 15124 5016 Too Many Requests: /api/user/
+WARNING 2026-02-25 15:03:36,798 log 23704 22936 Not Found: /favicon.ico
+WARNING 2026-02-25 15:03:53,463 log 23704 19464 Unauthorized: /api/user/
+WARNING 2026-02-25 15:09:49,336 log 23704 6884 Not Found: /favicon.ico
+WARNING 2026-02-25 15:13:19,702 log 23704 11944 Unauthorized: /api/user/
+WARNING 2026-02-25 15:24:59,434 log 23704 18084 Not Found: /favicon.ico
+WARNING 2026-02-25 15:33:52,671 log 23704 6520 Unauthorized: /api/user/
+WARNING 2026-02-25 15:33:56,614 log 23704 6520 Unauthorized: /api/user/
+WARNING 2026-02-25 15:55:02,491 log 23704 24136 Unauthorized: /api/user/
+WARNING 2026-02-25 16:07:52,308 log 23704 8424 Forbidden: /api/logout/
+WARNING 2026-02-25 16:08:49,116 log 23704 8520 Not Found: /favicon.ico

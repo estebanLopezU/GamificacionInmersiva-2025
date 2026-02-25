@@ -15,14 +15,18 @@ export default function UserPage() {
   // Effect to handle token from URL parameters (for redirection from Django)
   useEffect(() => {
     const token = searchParams.get('token');
-    if (token && !user && !authLoading) {
-      // Save token to localStorage
+    if (token && !authLoading) {
+      // Clear any existing tokens first to avoid session conflicts
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      
+      // Save new token to localStorage
       localStorage.setItem('access_token', token);
-      // Remove token from URL
-      router.replace('/page', undefined);
-      // The useAuth hook will detect the token and fetch user data
+      
+      // Remove token from URL and reload in one step to avoid infinite loop
+      window.location.href = '/page';
     }
-  }, [searchParams, user, authLoading, router]);
+  }, [searchParams, authLoading]);
 
   // Effect to handle redirection if user is not authenticated
   useEffect(() => {

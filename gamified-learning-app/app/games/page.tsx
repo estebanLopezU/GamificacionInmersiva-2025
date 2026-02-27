@@ -144,8 +144,8 @@ export default function Games() {
   };
 
   return (
-    <div className="text-white selection:bg-cyan-500/30">
-      <main className="max-w-7xl mx-auto pt-10 pb-20 px-6">
+    <div className="text-white selection:bg-cyan-500/30 w-full">
+      <main className="w-full max-w-7xl mx-auto px-6 py-10">
         <AnimatePresence mode="wait">
           
           {/* Welcome / Language Selection */}

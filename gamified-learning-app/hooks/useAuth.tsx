@@ -56,13 +56,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (data.tokens) {
         localStorage.setItem('access_token', data.tokens.access);
         localStorage.setItem('refresh_token', data.tokens.refresh);
-        // Assume user data is on the root of the response object, separate from tokens
-        const { tokens, ...userData } = data;
-        setUser(userData as User);
-        // The redirection will now be handled by the LoginPage component
+        
+        // Fetch complete user data from the server to ensure we have all info
+        try {
+          const userResponse = await api.getUser(data.tokens.access);
+          if (userResponse.ok) {
+            const fullUserData = await userResponse.json();
+            setUser(fullUserData as User);
+          } else {
+            // Fallback: use data from login response if getUser fails
+            const { tokens, ...userData } = data;
+            setUser(userData as User);
+          }
+        } catch (error) {
+          console.error('Error fetching user data after login:', error);
+          // Fallback: use data from login response
+          const { tokens, ...userData } = data;
+          setUser(userData as User);
+        }
       }
     } else {
-      throw new Error('Login failed');
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || errorData.detail || 'Login failed');
     }
   };
 

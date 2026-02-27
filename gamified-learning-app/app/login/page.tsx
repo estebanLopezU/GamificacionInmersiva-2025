@@ -82,7 +82,8 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      // Redirection is handled within useAuth.login()
+      // After successful login, the user state will be updated by the AuthProvider
+      // The useEffect below will handle redirection when user state changes
     } catch (err) {
       setError((err as Error).message || 'Ha ocurrido un error. Por favor, intenta de nuevo.');
       console.error('Login error:', err);

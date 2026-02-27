@@ -24,7 +24,7 @@ export default function RootLayout({
           <VRBackground />
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow">
+            <main className="flex-grow flex items-center justify-center">
               {children}
             </main>
           </div>
